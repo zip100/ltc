@@ -15,9 +15,9 @@ class CreateLtcsTable extends Migration
     {
         Schema::create('ltcs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('price');
-            $table->integer('amount');
-            $table->integer('coins');
+            $table->integer('price')->default(0);
+            $table->integer('amount')->default(0);
+            $table->integer('coins')->default(0);
             $table->timestamps();
         });
     }
