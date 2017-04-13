@@ -2,21 +2,22 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\OrderQuery;
 use App\Ltc;
+use App\Model\Order;
+use App\Module\Huobi;
 use Illuminate\Console\Command;
 
 class LtcWatch extends Command
 {
-
-    private $accessKey;
-
-    private $secretKey;
 
     private $count;
 
     private $last = 0;
 
     private $buy_price = 0;
+
+    private $processer;
 
     /**
      * The name and signature of the console command.
@@ -41,8 +42,7 @@ class LtcWatch extends Command
     {
         parent::__construct();
 
-        $this->accessKey = config('huobi.access_key');
-        $this->secretKey = config('huobi.secret_key');
+        $this->processer = new Huobi();
     }
 
     /**
@@ -52,10 +52,10 @@ class LtcWatch extends Command
      */
     public function handle()
     {
-        var_export($this->getAccountInfo());
+        var_export($this->processer->getAccountInfo());
 
         while (1) {
-            $price = $this->getLtcPrice();
+            $price = $this->processer->getLtcPrice();
 
             if (!$price) {
                 break;
@@ -89,121 +89,27 @@ class LtcWatch extends Command
             echo sprintf('%s %d %d', $price, $ltc->amount, $this->count), PHP_EOL;
             $this->last = $ltc->price;
 
-            // 跌了3毛钱开始买
-            if ($this->buy_price == 0 && $this->count < -30) {
-                $this->buy($ltc->price);
+            // 跌了3.5毛钱开始买
+            if ($this->buy_price == 0 && $this->count < -35) {
+
+                $amount = 1;
+
+                $res = $this->processer->buy($ltc->price, $amount);
+
+                $order = new Order();
+                $order->order_id = $res['id'];
+                $order->amount = $amount;
+                $order->price = $ltc->price;
+                $order->status = 0;
+                $order->save();
+
+                echo printf("Buy Price:%d Count:%d OrderId:%d", $ltc->price, $amount, $order->id), PHP_EOL;
+
+                $job = new OrderQuery($order->id);
+                dispatch($job);
             }
 
         }
     }
 
-    /**
-     * 最后交易价格
-     * @return array
-     */
-    private function getLtcPrice()
-    {
-        try {
-            $url = 'http://api.huobi.com/staticmarket/ticker_ltc_json.js';
-            $json = file_get_contents($url, true);
-            if (!$json) {
-                throw new \Exception('Ltc Json Null');
-            }
-        } catch (\Exception $e) {
-            \Log::error('QueryLtcInfoException ' . $e->getMessage());
-            return $this->getLtcPrice();
-        }
-        return json_decode($json, true)['ticker']['last'] * 100;
-    }
-
-
-    private function buy($price)
-    {
-        $this->buy_price = $price;
-        \Log::info("Buy " . $price);
-
-        if($price > 5700){
-            return;
-        }
-
-        $tParams = $extra = array();
-        $tParams['method'] = 'buy';
-        $tParams['coin_type'] = '2';
-        $tParams['price'] = $price / 100;
-        $tParams['amount'] = '1';
-        $tResult = $this->send2api($tParams, $extra);
-
-        return $tResult;
-    }
-
-    private function sale($price, $amount)
-    {
-        \Log::info("Sale " . $price);
-        $this->buy_price = 0;
-
-
-        $tParams = $extra = array();
-        $tParams['method'] = 'sell';
-        $tParams['coin_type'] = '2';
-        $tParams['price'] = $price / 100;
-        $tParams['amount'] = $amount;
-        $tResult = $this->send2api($tParams, $extra);
-    }
-
-    private function httpRequest($pUrl, $pData)
-    {
-        $tCh = curl_init();
-        if ($pData) {
-            is_array($pData) && $pData = http_build_query($pData);
-            curl_setopt($tCh, CURLOPT_POST, true);
-            curl_setopt($tCh, CURLOPT_POSTFIELDS, $pData);
-        }
-        curl_setopt($tCh, CURLOPT_HTTPHEADER, array("Content-type: application/x-www-form-urlencoded"));
-        curl_setopt($tCh, CURLOPT_URL, $pUrl);
-        curl_setopt($tCh, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($tCh, CURLOPT_SSL_VERIFYPEER, false);
-        $tResult = curl_exec($tCh);
-        curl_close($tCh);
-        $tmp = json_decode($tResult, 1);
-        if ($tmp) {
-            $tResult = $tmp;
-        }
-        return $tResult;
-    }
-
-
-    private function send2api($pParams, $extra = array())
-    {
-        $pParams['access_key'] = $this->accessKey;;
-        $pParams['created'] = time();
-        $pParams['sign'] = $this->createSign($pParams);
-        if ($extra) {
-            $pParams = array_merge($pParams, $extra);
-        }
-        $tResult = $this->httpRequest('https://api.huobi.com/apiv3', $pParams);
-
-        \Log::info(sprintf("Request:%s", json_encode($pParams)));
-        \Log::info(sprintf("Response:%s", json_encode($tResult)));
-
-        return $tResult;
-    }
-
-    private function createSign($pParams = array())
-    {
-        $pParams['secret_key'] = $this->secretKey;
-        ksort($pParams);
-        $tPreSign = http_build_query($pParams);
-        $tSign = md5($tPreSign);
-        return strtolower($tSign);
-    }
-
-    private function getAccountInfo()
-    {
-        $tParams = $extra = array();
-        $tParams['method'] = 'get_account_info';
-        // 不参与签名样例
-        // $extra['test'] = 'test';
-        $tResult = $this->send2api($tParams, $extra);
-        return $tResult;
-    }
 }

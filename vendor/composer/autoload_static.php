@@ -59,6 +59,7 @@ class ComposerStaticInit198ced0f81be75ced6d0f7d21f953f93
         array (
             'Psy\\' => 4,
             'Psr\\Log\\' => 8,
+            'Predis\\' => 7,
             'PhpParser\\' => 10,
         ),
         'M' => 
@@ -182,6 +183,10 @@ class ComposerStaticInit198ced0f81be75ced6d0f7d21f953f93
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Predis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/predis/predis/src',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -272,8 +277,8 @@ class ComposerStaticInit198ced0f81be75ced6d0f7d21f953f93
     );
 
     public static $classMap = array (
-        'AddAmountToLtc' => __DIR__ . '/../..' . '/database/migrations/2017_04_11_032926_add_amount_to_ltc.php',
         'CreateLtcsTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_11_030507_create_ltcs_table.php',
+        'CreateOrdersTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_12_150254_create_orders_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
