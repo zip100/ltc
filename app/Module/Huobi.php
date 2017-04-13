@@ -150,6 +150,7 @@ class Huobi
 
         $tParams = $extra = array();
         $tParams['method'] = 'cancel_order';
+        $tParams['coin_type'] = '2';
         $tParams['id'] = $id;
         return $this->send2api($tParams, $extra);
     }
