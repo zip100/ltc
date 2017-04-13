@@ -35,12 +35,18 @@ class OrderQuery implements ShouldQueue
     {
         $hanndle = new Huobi();
 
-        if ($this->attempts() == 10) {
+        if ($this->attempts() >= 10) {
             \Log::info(sprintf("买入超时,取消订单 %s", $this->order->id));
             $hanndle->cancelOrder($this->order->order_id);
+            sleep(1);
         }
 
         $response = $hanndle->queryOrder($this->order->order_id);
+
+        if (!isset($response['status'])) {
+            $this->release(3);
+        }
+
         if ($response['status'] != $this->order->status) {
             $this->order->status = $response['status'];
             $this->order->save();
@@ -51,9 +57,8 @@ class OrderQuery implements ShouldQueue
             $hanndle->sale($price, ($this->order->amount - $this->order->amount * 0.002));
         }
 
-
         if (in_array($this->order->status, [0, 1, 7])) {
-            $this->release(2);
+            $this->release(3);
         }
     }
 }

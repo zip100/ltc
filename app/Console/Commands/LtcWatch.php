@@ -92,21 +92,27 @@ class LtcWatch extends Command
             // 跌了3.5毛钱开始买
             if ($this->buy_price == 0 && $this->count < -35) {
 
-                $amount = 1;
+                $amount = 2;
 
                 $res = $this->processer->buy($ltc->price, $amount);
 
-                $order = new Order();
-                $order->order_id = $res['id'];
-                $order->amount = $amount;
-                $order->price = $ltc->price;
-                $order->status = 0;
-                $order->save();
+                if (isset($res['result']) && 'success' == $res['result']) {
+                    $order = new Order();
+                    $order->order_id = $res['id'];
+                    $order->amount = $amount;
+                    $order->price = $ltc->price;
+                    $order->status = 0;
+                    $order->save();
 
-                echo printf("Buy Price:%d Count:%d OrderId:%d", $ltc->price, $amount, $order->id), PHP_EOL;
+                    echo printf("Buy Price:%d Count:%d OrderId:%d", $ltc->price, $amount, $order->id), PHP_EOL;
 
-                $job = new OrderQuery($order->id);
-                dispatch($job);
+                    $job = new OrderQuery($order->id);
+                    dispatch($job);
+                } else {
+                    echo printf("Buy Failed Price:%d Count:%d", $ltc->price, $amount), PHP_EOL;
+                }
+
+
             }
 
         }
