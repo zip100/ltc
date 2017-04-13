@@ -35,10 +35,9 @@ class OrderQuery implements ShouldQueue
     {
         $hanndle = new Huobi();
 
-        if ($this->attempts() > 10) {
+        if ($this->attempts() == 10) {
             \Log::info(sprintf("买入超时,取消订单 %s", $this->order->id));
             $hanndle->cancelOrder($this->order->order_id);
-            $this->release();
         }
 
         $response = $hanndle->queryOrder($this->order->order_id);
@@ -48,7 +47,7 @@ class OrderQuery implements ShouldQueue
         }
 
         if ($this->order->status == 2) {
-            $price = $this->order->price + 35;
+            $price = $this->order->price + 50;
             $hanndle->sale($price, ($this->order->amount - $this->order->amount * 0.002));
         }
 
