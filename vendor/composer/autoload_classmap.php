@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'CreateBtcsTable' => $baseDir . '/database/migrations/2017_04_14_170325_create_btcs_table.php',
     'CreateLtcsTable' => $baseDir . '/database/migrations/2017_04_11_030507_create_ltcs_table.php',
     'CreateOrdersTable' => $baseDir . '/database/migrations/2017_04_12_150254_create_orders_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',

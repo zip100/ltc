@@ -14,6 +14,9 @@ class Huobi
 
     private $secretKey;
 
+    const CONIN_BTC = 1;
+    const CONIN_LTC = 2;
+
     function __construct()
     {
         $this->accessKey = config('huobi.access_key');
@@ -128,7 +131,7 @@ class Huobi
         return json_decode($json, true)['ticker']['last'] * 100;
     }
 
-    public function buy($price, $amount)
+    public function buy($price, $amount, $type)
     {
         \Log::info("Buy " . $price);
         $this->buy_price = 0;
@@ -136,13 +139,14 @@ class Huobi
 
         $tParams = $extra = array();
         $tParams['method'] = 'buy';
-        $tParams['coin_type'] = '2';
+        $tParams['coin_type'] = $type;
         $tParams['price'] = $price / 100;
         $tParams['amount'] = $amount;
         return $this->send2api($tParams, $extra);
     }
 
-    public function cancelOrder($id){
+    public function cancelOrder($id)
+    {
 
         \Log::info("Cancel " . $id);
         $this->buy_price = 0;
@@ -153,5 +157,35 @@ class Huobi
         $tParams['coin_type'] = '2';
         $tParams['id'] = $id;
         return $this->send2api($tParams, $extra);
+    }
+
+
+    /**
+     * 最后Btc交易价格
+     * @return array
+     */
+    public function getBtcPrice()
+    {
+
+        //return rand(6800.00, 7100.99) * 100;
+
+        try {
+            $url = 'http://api.huobi.com/staticmarket/ticker_btc_json.js';
+            $json = file_get_contents($url, true);
+            if (!$json) {
+                throw new \Exception('Ltc Json Null');
+            }
+        } catch (\Exception $e) {
+            \Log::error('QueryLtcInfoException ' . $e->getMessage());
+            return $this->getBtcPrice();
+        }
+        return json_decode($json, true)['ticker']['last'] * 100;
+    }
+
+
+    public function getMoney()
+    {
+        $info = $this->getAccountInfo();
+        return isset($info['available_cny_display']) ? $info['available_cny_display'] : -1;
     }
 }

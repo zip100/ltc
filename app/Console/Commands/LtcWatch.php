@@ -67,6 +67,9 @@ class LtcWatch extends Command
 
     public function test()
     {
+
+        $lists = \App\Model\Ltc::where('created_at', '>', date('Y-m-d H:i:s', time() - 960))->sum('amount');
+
         while (1) {
             $this->process(rand(5500, 5600));
         }
@@ -94,7 +97,7 @@ class LtcWatch extends Command
 
                 $amount = 2;
 
-                $res = $this->processer->buy($ltc->price, $amount);
+                $res = $this->processer->buy($ltc->price, $amount, Huobi::CONIN_LTC);
 
                 if (isset($res['result']) && 'success' == $res['result']) {
                     $order = new Order();
