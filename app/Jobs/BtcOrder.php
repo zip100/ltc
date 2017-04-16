@@ -47,7 +47,7 @@ class BtcOrder implements ShouldQueue
         }
         if ($this->info['status'] == '2') {
             $amount = $this->info['processed_amount'] - $this->info['fee'];
-            $price = $this->info['processed_price'] + 100;
+            $price = ($this->info['processed_price'] + 100) * 100;
             $this->processer->sale($price, $amount, Huobi::CONIN_BTC);
         }
     }
