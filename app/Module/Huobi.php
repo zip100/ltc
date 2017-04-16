@@ -80,12 +80,12 @@ class Huobi
         return $tResult;
     }
 
-    public function queryOrder($orderId)
+    public function queryOrder($orderId, $type)
     {
         $tParams = $extra = array();
         $tParams['method'] = 'order_info';
 
-        $tParams['coin_type'] = '2';
+        $tParams['coin_type'] = $type;
         $tParams['id'] = $orderId;
 
         // 不参与签名样例
@@ -95,7 +95,7 @@ class Huobi
 
     }
 
-    public function sale($price, $amount)
+    public function sale($price, $amount, $type)
     {
         \Log::info("Sale " . $price);
         $this->buy_price = 0;
@@ -103,7 +103,7 @@ class Huobi
 
         $tParams = $extra = array();
         $tParams['method'] = 'sell';
-        $tParams['coin_type'] = '2';
+        $tParams['coin_type'] = $type;
         $tParams['price'] = $price / 100;
         $tParams['amount'] = $amount;
         $tResult = $this->send2api($tParams, $extra);

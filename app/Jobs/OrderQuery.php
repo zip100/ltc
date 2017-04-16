@@ -41,7 +41,7 @@ class OrderQuery implements ShouldQueue
             sleep(1);
         }
 
-        $response = $hanndle->queryOrder($this->order->order_id);
+        $response = $hanndle->queryOrder($this->order->order_id, Huobi::CONIN_LTC);
 
         if (!isset($response['status'])) {
             $this->release(3);
@@ -54,7 +54,7 @@ class OrderQuery implements ShouldQueue
 
         if ($this->order->status == 2) {
             $price = $this->order->price + 50;
-            $hanndle->sale($price, ($this->order->amount - $this->order->amount * 0.002));
+            $hanndle->sale($price, ($this->order->amount - $this->order->amount * 0.002), Huobi::CONIN_LTC);
         }
 
         if (in_array($this->order->status, [0, 1, 7])) {

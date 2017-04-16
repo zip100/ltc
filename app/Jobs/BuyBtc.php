@@ -54,12 +54,18 @@ class BuyBtc implements ShouldQueue
 
         // 当前价格减去10块作为买入价格
         $buyPrice = $nowPrice - 1000;
-        
+
         // 当前可用金额除以单价全额买入
         $buyCount = round($money / $buyPrice, 4);
 
 
         \Log::info(sprintf('[Buy] 单价:%s 数量:%s', $buyPrice, $buyCount));
-        $handle->buy($buyPrice, $buyCount, Huobi::CONIN_BTC);
+        $res = $handle->buy($buyPrice, $buyCount, Huobi::CONIN_BTC);
+
+        if ($res['result'] == 'success') {
+            $job = new BtcOrder($res['id']);
+            dispatch($job);
+        }
+
     }
 }
