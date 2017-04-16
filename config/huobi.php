@@ -15,6 +15,6 @@ return [
         // 降幅查询偏移时间
         'time_offset' => 3600,
         // 降幅阀值
-        'price_lower' => -10
+        'price_lower' => -100
     ]
 ];

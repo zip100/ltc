@@ -77,12 +77,10 @@ class BtcWatch extends Command
             echo sprintf('%d %s %s', $price, $str, $amount), PHP_EOL;
 
 
-            if ($amount < 0) {
-               // $job = new BuyBtc();
-               // dispatch($job);
+            if ($amount < 0 && $amount <= -10000 && $price < 710000) {
+                $job = new BuyBtc();
+                dispatch($job);
             }
-
-            sleep(1);
         }
     }
 }

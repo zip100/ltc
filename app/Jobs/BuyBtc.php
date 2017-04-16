@@ -38,27 +38,8 @@ class BuyBtc implements ShouldQueue
 
         \Log::info(sprintf('[StartBuyBtcJob]'));
 
-        // 价格阀值
-        $priceLimit = $config['price_limit'] * 100;
         // 当前价格
         $nowPrice = $handle->getBtcPrice();
-
-        if ($nowPrice > $priceLimit) {
-            \Log::info(sprintf('[CancelBuy] 当前价格 %s 大于价格阀值  %s 放弃购买!', ($nowPrice / 100), $config['price_limit']));
-            return;
-        } else {
-            \Log::info(sprintf('[Buy] 当前价格 %s 小于于价格阀值  %s 继续购买!', ($nowPrice / 100), $config['price_limit']));
-        }
-
-
-        // 最近一个小时的降幅
-        $amount = \App\Model\Btc::where('created_at', '>', date('Y-m-d H:i:s', time() - $config['time_offset']))->sum('amount');
-        if ($amount > ($config['price_lower'] * 100)) {
-            \Log::info(sprintf('[CancelBuy] 最近一小时降幅为 %s 未达到 %s 放弃购买!', ($amount / 100), $config['price_lower']));
-            return;
-        } else {
-            \Log::info(sprintf('[Buy] 最近一小时降幅为 %s 已达到 %s 继续购买!', ($amount / 100), $config['price_lower']));
-        }
 
         // 账户余额
         $money = $handle->getMoney();
@@ -73,11 +54,12 @@ class BuyBtc implements ShouldQueue
 
         // 当前价格减去10块作为买入价格
         $buyPrice = $nowPrice - 1000;
+        
         // 当前可用金额除以单价全额买入
         $buyCount = round($money / $buyPrice, 4);
 
 
         \Log::info(sprintf('[Buy] 单价:%s 数量:%s', $buyPrice, $buyCount));
-        // $handle->buy($buyPrice, $buyCount, Huobi::CONIN_BTC);
+        $handle->buy($buyPrice, $buyCount, Huobi::CONIN_BTC);
     }
 }
