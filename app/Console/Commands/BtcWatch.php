@@ -42,6 +42,7 @@ class BtcWatch extends Command
     {
         $lastPrice = 0;
         $handdle = new Huobi();
+        $config = config('huobi.btc');
 
         while (1) {
             $price = $handdle->getBtcPrice();
@@ -69,11 +70,16 @@ class BtcWatch extends Command
 
             $lastPrice = $price;
 
-            echo sprintf('%d %s', $price, $str), PHP_EOL;
 
-            if($amount <  0){
-                $job = new BuyBtc();
-                dispatch($job);
+            $amount = \App\Model\Btc::where('created_at', '>', date('Y-m-d H:i:s', time() - $config['time_offset']))->sum('amount');
+
+
+            echo sprintf('%d %s %s', $price, $str, $amount), PHP_EOL;
+
+
+            if ($amount < 0) {
+               // $job = new BuyBtc();
+               // dispatch($job);
             }
 
             sleep(1);
