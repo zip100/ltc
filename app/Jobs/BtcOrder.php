@@ -42,10 +42,10 @@ class BtcOrder implements ShouldQueue
 
         // 0未成交　1部分成交　2已完成　3已取消 4废弃（该状态已不再使用） 5异常 6部分成交已取消 7队列中
 
-        if ($this->info == '0' || $this->info == '1') {
+        if ($this->info['status'] == '0' || $this->info['status'] == '1') {
             $this->release();
         }
-        if ($this->info == '2') {
+        if ($this->info['status'] == '2') {
             $amount = $this->info['processed_amount'] - $this->info['fee'];
             $price = $this->info['processed_price'] + 100;
             $this->processer->sale($price, $amount, Huobi::CONIN_BTC);
