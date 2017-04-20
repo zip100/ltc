@@ -36,8 +36,6 @@ class HuobiWatch extends Command
      */
     public function __construct()
     {
-        \App\Module\Huobi\Product\Btc::getInstance()->buyCoins(7000, 1);
-
         parent::__construct();
     }
 
