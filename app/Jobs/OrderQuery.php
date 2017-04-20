@@ -48,7 +48,8 @@ class OrderQuery implements ShouldQueue
         if ($this->order['status'] == 2) {
             \Log::info('[Buy][Success] id:' . $this->order->id);
             $salePrice = $this->order['order_price'] + 100;
-            $saleAmount = round($this->order['order_amount'] - $this->order['order_amount'] * 0.002, 4);
+            $saleAmount = floor(($this->order['order_amount'] - $this->order['order_amount'] * 0.002) * 10000) / 10000;
+
             Btc::getInstance()->saleCoins($salePrice, $saleAmount);
             return;
         }
