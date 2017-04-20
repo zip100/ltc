@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\Buy;
 use App\Model\Huobi;
 use App\Module\Huobi\Product\Btc;
 use App\Module\Huobi\Product\Ltc;
@@ -50,11 +51,17 @@ class HuobiWatch extends Command
             $btcPrice = Btc::getInstance()->getLastPrice();
             if ($btcPrice != $this->last[Btc::FLAG]) {
 
-                $this->last[Btc::FLAG] != 0 && Huobi::forceCreate([
+                $this->last[Btc::FLAG] != 0 && $row = Huobi::forceCreate([
                     'type' => Btc::FLAG,
                     'price' => $btcPrice,
                     'amount' => $btcPrice - $this->last[Btc::FLAG],
                 ]);
+
+
+                if (isset($row) && ($btcPrice - $this->last[Btc::FLAG] < 0)) {
+                    $job = new Buy($row->id);
+                    dispatch($job);
+                }
 
                 $this->last[Btc::FLAG] = $btcPrice;
             }

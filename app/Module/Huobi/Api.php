@@ -158,9 +158,18 @@ abstract class Api
         return static::$_instance;
     }
 
+    public function getAllOrdes($type){
+        $tParams = $extra = array();
+        $tParams['method'] = 'get_orders';
+        $tParams['coin_type'] = $type;
+        return $this->send2api($tParams, $extra);
+    }
+
     abstract public function getLastPrice();
 
     abstract public function buyCoins($price, $amount);
+
+    abstract public function buyCoinsAuto($price);
 
     abstract public function saleCoins($price, $amount);
 

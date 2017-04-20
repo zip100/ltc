@@ -41,4 +41,14 @@ class Btc extends Api
     {
         return parent::__query($orderId, self::FLAG);
     }
+
+    public function buyCoinsAuto($price)
+    {
+        // 当前余额
+        $money = self::getMoney();
+
+        $amount = round(($money / $price), 4);
+
+        return parent::__buy($price, $amount, self::FLAG);
+    }
 }
