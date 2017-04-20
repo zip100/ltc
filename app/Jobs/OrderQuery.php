@@ -16,7 +16,7 @@ class OrderQuery implements ShouldQueue
 
     // 0未成交　1部分成交　2已完成　3已取消 4废弃（该状态已不再使用） 5异常 6部分成交已取消 7队列中
 
-    private $order;
+    private $order, $type, $id;
 
     /**
      * Create a new job instance.
@@ -25,12 +25,8 @@ class OrderQuery implements ShouldQueue
      */
     public function __construct($id, $type)
     {
-        if ($type == Btc::FLAG) {
-            $this->order = Btc::getInstance()->cancelOrder($id);
-        }
-        if ($type == Ltc::FLAG) {
-            $this->order = Ltc::getInstance()->cancelOrder($id);
-        }
+        $this->type = $type;
+        $this->id = $id;
     }
 
     /**
@@ -40,13 +36,27 @@ class OrderQuery implements ShouldQueue
      */
     public function handle()
     {
+
+        if ($this->type == Btc::FLAG) {
+            $this->order = Btc::getInstance()->queryOrder($this->id);
+        }
+        if ($this->type == Ltc::FLAG) {
+            $this->order = Ltc::getInstance()->queryOrder($this->id);
+        }
+
         // 交易完成
         if ($this->order['status'] == 2) {
-            \Log::info('[Buy][Success] id:'. $this->order->id);
+            \Log::info('[Buy][Success] id:' . $this->order->id);
             $salePrice = $this->order['order_price'] + 100;
             $saleAmount = round($this->order['order_amount'] - $this->order['order_amount'] * 0.002, 4);
             Btc::getInstance()->saleCoins($salePrice, $saleAmount);
             return;
         }
+
+        if ($this->order['status'] == 3) {
+            return;
+        }
+
+        $this->release(2);
     }
 }

@@ -46,8 +46,8 @@ class Btc extends Api
     {
         // 当前余额
         $money = self::getMoney();
-
-        $amount = round(($money / $price), 4);
+        
+        $amount = floor(($money / $price) * 10000) / 10000;
 
         return parent::__buy($price, $amount, self::FLAG);
     }
