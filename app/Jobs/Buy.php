@@ -33,6 +33,8 @@ class Buy implements ShouldQueue
      */
     public function handle()
     {
+        \Log::info('[Start][BuyJob]');
+
         // 比特币
         if ($this->info['type'] == Btc::FLAG) {
             // 最近半个小时幅度
@@ -43,6 +45,7 @@ class Buy implements ShouldQueue
 
                 //  买入成功
                 if (isset($res['result']) && $res['result'] == 'success' && isset($res['id']) && $res['id']) {
+                    \Log::info('[Buy][Success] id:' . $this->info['id']);
                     $job = new OrderQuery($res['id'], Btc::FLAG);
                     dispatch($job);
                 }
