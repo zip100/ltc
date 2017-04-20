@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBtcsTable extends Migration
+class CreateHuobisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateBtcsTable extends Migration
      */
     public function up()
     {
-        Schema::create('btcs', function (Blueprint $table) {
+        Schema::create('huobis', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('price')->index();
-            $table->integer('amount')->index();
+            $table->enum('type',[1,2])->index();
+            $table->decimal('price')->index();
+            $table->decimal('amount')->index();
 
             $table->timestamps();
         });
@@ -30,6 +31,6 @@ class CreateBtcsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('btcs');
+        Schema::dropIfExists('huobis');
     }
 }

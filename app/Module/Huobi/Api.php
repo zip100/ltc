@@ -2,25 +2,25 @@
 /**
  * Created by PhpStorm.
  * User: mike
- * Date: 2017/4/12
- * Time: 下午3:12
+ * Date: 2017/4/20
+ * Time: 上午11:29
  */
+namespace App\Module\Huobi;
 
-namespace App\Module;
-
-class Huobi
+abstract class Api
 {
-    private $accessKey;
 
-    private $secretKey;
+    private $accessKey, $secretKey, $ticker;
 
     const CONIN_BTC = 1;
     const CONIN_LTC = 2;
+
 
     function __construct()
     {
         $this->accessKey = config('huobi.access_key');
         $this->secretKey = config('huobi.secret_key');
+        $this->ticker = config('huobi.api.ticker');
     }
 
     private function httpRequest($pUrl, $pData)
@@ -43,7 +43,6 @@ class Huobi
         }
         return $tResult;
     }
-
 
     private function send2api($pParams, $extra = array())
     {
@@ -74,112 +73,74 @@ class Huobi
     {
         $tParams = $extra = array();
         $tParams['method'] = 'get_account_info';
-        // 不参与签名样例
-        // $extra['test'] = 'test';
         $tResult = $this->send2api($tParams, $extra);
         return $tResult;
     }
 
-    public function queryOrder($orderId, $type)
+    protected function __query($orderId, $type)
     {
         $tParams = $extra = array();
         $tParams['method'] = 'order_info';
-
         $tParams['coin_type'] = $type;
         $tParams['id'] = $orderId;
-
-        // 不参与签名样例
-        // $extra['test'] = 'test';
         $tResult = $this->send2api($tParams, $extra);
         return $tResult;
 
     }
 
-    public function sale($price, $amount, $type)
+    protected function __sale($price, $amount, $type)
     {
         \Log::info("Sale " . $price);
         $this->buy_price = 0;
-
-
         $tParams = $extra = array();
         $tParams['method'] = 'sell';
         $tParams['coin_type'] = $type;
-        $tParams['price'] = $price / 100;
+        $tParams['price'] = $price;
         $tParams['amount'] = $amount;
         $tResult = $this->send2api($tParams, $extra);
 
         echo printf("Sell Price:%d Count:%d", $price, $amount), PHP_EOL;
     }
 
-
-    /**
-     * 最后交易价格
-     * @return array
-     */
-    public function getLtcPrice()
-    {
-        try {
-            $url = 'http://api.huobi.com/staticmarket/ticker_ltc_json.js';
-            $json = file_get_contents($url, true);
-            if (!$json) {
-                throw new \Exception('Ltc Json Null');
-            }
-        } catch (\Exception $e) {
-            \Log::error('QueryLtcInfoException ' . $e->getMessage());
-            return $this->getLtcPrice();
-        }
-        return json_decode($json, true)['ticker']['last'] * 100;
-    }
-
-    public function buy($price, $amount, $type)
+    protected function __buy($price, $amount, $type)
     {
         \Log::info("Buy " . $price);
-        $this->buy_price = 0;
-
-
         $tParams = $extra = array();
         $tParams['method'] = 'buy';
         $tParams['coin_type'] = $type;
-        $tParams['price'] = $price / 100;
+        $tParams['price'] = $price;
         $tParams['amount'] = $amount;
         return $this->send2api($tParams, $extra);
     }
 
-    public function cancelOrder($id)
+    protected function __cancel($id, $type)
     {
 
         \Log::info("Cancel " . $id);
-        $this->buy_price = 0;
-
-
         $tParams = $extra = array();
         $tParams['method'] = 'cancel_order';
-        $tParams['coin_type'] = '2';
+        $tParams['coin_type'] = $type;
         $tParams['id'] = $id;
         return $this->send2api($tParams, $extra);
     }
-
 
     /**
      * 最后Btc交易价格
      * @return array
      */
-    public function getBtcPrice()
+    public function getProductTraceInfo($type)
     {
-
-        //return rand(6800.00, 7100.99) * 100;
-
         try {
-            $url = 'http://api.huobi.com/staticmarket/ticker_btc_json.js';
+            $url = $type == self::CONIN_BTC ? $this->ticker['btc'] : $this->ticker['ltc'];
             $json = file_get_contents($url, true);
             if (!$json) {
                 throw new \Exception('Ltc Json Null');
             }
         } catch (\Exception $e) {
-            \Log::error('QueryLtcInfoException ' . $e->getMessage());
-            return $this->getBtcPrice();
+            \Log::error('[ProductTraceInfo][QueryException] ' . $e->getMessage());
+            return $this->getProductTraceInfo($type);
         }
-        return json_decode($json, true)['ticker']['last'] * 100;
+        return json_decode($json, true);
     }
 
 
@@ -188,4 +149,22 @@ class Huobi
         $info = $this->getAccountInfo();
         return isset($info['available_cny_display']) ? $info['available_cny_display'] : -1;
     }
+
+    public static function getInstance()
+    {
+        if (!static::$_instance) {
+            static::$_instance = new static;
+        }
+        return static::$_instance;
+    }
+
+    abstract public function getLastPrice();
+
+    abstract public function buyCoins($price, $amount);
+
+    abstract public function saleCoins($price, $amount);
+
+    abstract public function cancelOrder($orderId);
+
+    abstract public function queryOrder($orderId);
 }

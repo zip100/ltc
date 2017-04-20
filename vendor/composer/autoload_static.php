@@ -278,6 +278,7 @@ class ComposerStaticInit198ced0f81be75ced6d0f7d21f953f93
 
     public static $classMap = array (
         'CreateBtcsTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_14_170325_create_btcs_table.php',
+        'CreateHuobisTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_20_144644_create_huobis_table.php',
         'CreateLtcsTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_11_030507_create_ltcs_table.php',
         'CreateOrdersTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_12_150254_create_orders_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',

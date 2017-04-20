@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\BtcWatch;
+use App\Console\Commands\HuobiWatch;
 use App\Console\Commands\LtcWatch;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -15,8 +16,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        LtcWatch::class,
-        BtcWatch::class
+        HuobiWatch::class,
     ];
 
     /**

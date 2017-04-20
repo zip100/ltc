@@ -16,5 +16,11 @@ return [
         'time_offset' => 3600,
         // 降幅阀值
         'price_lower' => -100
+    ],
+    'api' => [
+        'ticker' => [
+            'btc' => 'http://api.huobi.com/staticmarket/ticker_btc_json.js',
+            'ltc' => 'http://api.huobi.com/staticmarket/ticker_ltc_json.js',
+        ]
     ]
 ];
