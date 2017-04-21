@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('Yunxinshi', function ($app) {
+            return new \App\Module\Yunxinshi(config('yunxinshi'));
+        });
     }
 }
