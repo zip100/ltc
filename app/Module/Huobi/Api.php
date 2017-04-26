@@ -165,6 +165,10 @@ abstract class Api
         return $this->send2api($tParams, $extra);
     }
 
+    public static function sendSms($mobile,array $content){
+        return \Sms::send($mobile, 400046, $content);
+    }
+
     abstract public function getLastPrice();
 
     abstract public function buyCoins($price, $amount);

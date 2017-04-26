@@ -30,10 +30,11 @@ class Yunxinshi
         try {
             $res = file_get_contents($url);
             if (!$res) {
-                throw new \Exception('return null');
+                throw new \Exception('[Sms][Send][Exception] return null');
             }
+            $res = json_decode(iconv('GB2312', 'UTF-8', $res), true);
             if (!isset($res['stat']) || $res['stat'] != '200') {
-                throw new \Exception('return null');
+                throw new \Exception('[Sms][Send][Exception] ' . json_encode($res));
             }
         } catch (\Exception $e) {
             \Log::info($e->getMessage());
