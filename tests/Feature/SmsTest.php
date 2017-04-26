@@ -16,10 +16,8 @@ class SmsTest extends TestCase
      */
     public function testExample()
     {
-        $res = \Sms::send('18610009545', '400046', ['type' => '比特币', 'content' => '测试']);
+        $result = \Sms::send('18610009545', '400046', ['type' => '比特币', 'content' => '测试' . time()]);
 
-        var_export($res);
-
-        $this->assertTrue(true);
+        $this->assertTrue($result);
     }
 }
