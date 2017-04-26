@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\Buy;
 use App\Model\Huobi;
+use App\Module\Huobi\Api;
 use App\Module\Huobi\Product\Btc;
 use App\Module\Huobi\Product\Ltc;
 
@@ -14,6 +15,11 @@ class HuobiWatch extends Command
     private $last = [
         1 => 0,
         2 => 0
+    ];
+
+    private $sendTime = [
+        Api::CONIN_BTC => 0,
+        Api::CONIN_LTC => 0
     ];
 
     /**
@@ -47,6 +53,9 @@ class HuobiWatch extends Command
      */
     public function handle()
     {
+        // 系统启动事件
+        event(new \App\Events\HuobiWatch(\App\Events\HuobiWatch::ACTION_START));
+
         while (1) {
             $btcPrice = Btc::getInstance()->getLastPrice();
             if ($btcPrice != $this->last[Btc::FLAG]) {
@@ -56,11 +65,13 @@ class HuobiWatch extends Command
                     'price' => $btcPrice,
                     'amount' => $btcPrice - $this->last[Btc::FLAG],
                 ]);
+                // 最近半个小时幅度
+                $btcAmount = Huobi::where('type', Btc::FLAG)->where('created_at', '>', date('Y-m-d H:i:s', time() - 1800))->sum('amount');
 
+                if ($btcAmount <= -100 && (time() - $this->sendTime[Api::CONIN_BTC] > 300)) {
+                    event(new \App\Events\HuobiPrice($row));
 
-                if (isset($row) && ($btcPrice - $this->last[Btc::FLAG] < 0)) {
-                    $job = new Buy($row->id);
-                    dispatch($job);
+                    $this->sendTime[Api::CONIN_BTC] = time();
                 }
 
                 $this->last[Btc::FLAG] = $btcPrice;
@@ -75,6 +86,14 @@ class HuobiWatch extends Command
                     'price' => $ltcPrice,
                     'amount' => $ltcPrice - $this->last[Ltc::FLAG],
                 ]);
+                // 最近半个小时幅度
+                $ltcAmount = Huobi::where('type', Ltc::FLAG)->where('created_at', '>', date('Y-m-d H:i:s', time() - 1800))->sum('amount');
+                if ($ltcAmount <= -1.5 && (time() - $this->sendTime[Api::CONIN_LTC] > 300)) {
+                    event(new \App\Events\HuobiPrice($row));
+
+                    $this->sendTime[Api::CONIN_LTC] = time();
+                }
+
 
                 $this->last[Ltc::FLAG] = $ltcPrice;
             }
