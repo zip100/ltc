@@ -2020,7 +2020,7 @@
         "version_normalized": "0.9.9.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/padraic/mockery.git",
+            "url": "https://github.com/mockery/mockery.git",
             "reference": "6fdb61243844dc924071d3404bb23994ea0b6856"
         },
         "dist": {
@@ -3494,6 +3494,122 @@
             "nosql",
             "predis",
             "redis"
+        ]
+    },
+    {
+        "name": "yajra/laravel-datatables-oracle",
+        "version": "v7.3.0",
+        "version_normalized": "7.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/yajra/laravel-datatables.git",
+            "reference": "ed5b5908c505f89b815a1ef5bcc7cc3f9731d397"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/yajra/laravel-datatables/ed5b5908c505f89b815a1ef5bcc7cc3f9731d397.zip",
+            "reference": "ed5b5908c505f89b815a1ef5bcc7cc3f9731d397",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/database": "5.4.*",
+            "illuminate/filesystem": "5.4.*",
+            "illuminate/http": "5.4.*",
+            "illuminate/support": "5.4.*",
+            "illuminate/view": "5.4.*",
+            "php": ">=5.6.4"
+        },
+        "require-dev": {
+            "mockery/mockery": "0.9.*",
+            "orchestra/testbench": "^3.4",
+            "phpunit/phpunit": "~5.7"
+        },
+        "suggest": {
+            "league/fractal": "Transform your api response into something you won't hate.",
+            "yajra/laravel-datatables-buttons": "Plugin for server-side exporting of dataTable.",
+            "yajra/laravel-datatables-html": "Plugin for server-side HTML builder of dataTable."
+        },
+        "time": "2017-02-23 03:11:23",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "7.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Yajra\\Datatables\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Arjay Angeles",
+                "email": "aqangeles@gmail.com"
+            }
+        ],
+        "description": "jQuery DataTables API for Laravel 4|5",
+        "keywords": [
+            "datatables",
+            "jquery",
+            "laravel"
+        ]
+    },
+    {
+        "name": "twbs/bootstrap",
+        "version": "v3.3.7",
+        "version_normalized": "3.3.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/twbs/bootstrap.git",
+            "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/twbs/bootstrap/0b9c4a4007c44201dce9a6cc1a38407005c26c86.zip",
+            "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+            "shasum": ""
+        },
+        "replace": {
+            "twitter/bootstrap": "self.version"
+        },
+        "time": "2016-07-25 15:51:55",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jacob Thornton",
+                "email": "jacobthornton@gmail.com"
+            },
+            {
+                "name": "Mark Otto",
+                "email": "markdotto@gmail.com"
+            }
+        ],
+        "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+        "homepage": "http://getbootstrap.com",
+        "keywords": [
+            "JS",
+            "css",
+            "framework",
+            "front-end",
+            "less",
+            "mobile-first",
+            "responsive",
+            "web"
         ]
     }
 ]

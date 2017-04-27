@@ -14,3 +14,16 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
+
+//Route::controller('datatables', 'DatatablesController', [
+//    'anyData'  => 'datatables.data',
+//    'getIndex' => 'datatables',
+//]);
+
+
+Route::get('/datatables/data', 'HomeController@getData');
+
