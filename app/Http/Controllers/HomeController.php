@@ -26,15 +26,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $list = Huobi::get();
-
         return view('home');
     }
 
     public function getData()
     {
-
-
         return Datatables::of(Huobi::query()->where('id', '>', 1)->orderBy('id', 'desc'))->make(true);
     }
 }
