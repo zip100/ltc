@@ -112,7 +112,13 @@ abstract class Api
         $tParams['coin_type'] = $type;
         $tParams['price'] = $price;
         $tParams['amount'] = $amount;
-        return $this->send2api($tParams, $extra);
+
+        $res = $this->send2api($tParams, $extra);
+        $res['data']['amount'] = $amount;
+        $res['data']['price'] = $price;
+        $res['data']['money'] = $amount * $price;
+
+        return $res;
     }
 
     protected function __cancel($id, $type)

@@ -51,10 +51,6 @@ class Ltc extends Api
 
         $res =  parent::__buy($price, $amount, self::FLAG);
 
-        $res['data']['amount'] = $amount;
-        $res['data']['price'] = $price;
-        $res['data']['money'] = $money;
-
         return $res;
     }
 }

@@ -58,13 +58,18 @@ class HomeController extends Controller
 
         $buyPrice = $request->get('buy_price');
         $sellPrice = $request->get('sell_price', 0);
+        $buyAmount = $request->get('buy_amount', 0);
 
 
         if ($sellPrice > 0 && $sellPrice - $buyPrice < 0.5) {
             return redirect()->back()->withErrors('买入卖出价格区间不能小于 0.5');
         }
 
-        $res = Ltc::getInstance()->buyCoinsAuto($buyPrice);
+        if ($buyAmount) {
+            $res = Ltc::getInstance()->buyCoins($buyPrice, $buyAmount);
+        } else {
+            $res = Ltc::getInstance()->buyCoinsAuto($buyPrice);
+        }
 
         if (isset($res['result']) && $res['result'] == 'success') {
             $order = Order::forceCreate([

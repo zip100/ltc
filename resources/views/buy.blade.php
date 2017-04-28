@@ -137,7 +137,7 @@
                                 <div class="col-sm-2">
                                     <input disabled class="form-control pull-right" type="text" name="auto_price"/>
                                 </div>
-                                <label class="col-sm-2 control-label">买入数量</label>
+                                <label class="col-sm-2 control-label">全额数量</label>
                                 <div class="col-sm-2">
                                     <input disabled class="form-control pull-right" type="text" name="auto_amount"/>
                                 </div>
@@ -152,6 +152,15 @@
                                 <label class="col-sm-2 control-label">卖出价格</label>
                                 <div class="col-sm-2">
                                     <input class="form-control pull-right" type="text" name="sell_price"/>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">购买数量</label>
+                                <div class="col-sm-2">
+                                    <input class="form-control pull-right" type="text" name="buy_amount"/>
                                 </div>
                                 <div class="col-sm-2">
                                     <button type="submit" class="btn btn-success pull-right">买入</button>
@@ -176,11 +185,9 @@
     }
 
     function select(price){
-        $('input[name="buy_price"]').val(price);
-        $('input[name="sell_price"]').val(price+1.5);
-
         if(confirm('价格:'+price+' 确认要买入吗?')){
-
+            $('input[name="buy_price"]').val(price);
+            $('input[name="sell_price"]').val(price+1.5);
         }
     }
 
