@@ -85,10 +85,17 @@ class HuobiListener implements ShouldQueue
             $sellAmount = $event->order->buy_amount;
 
             $instance = $event->order->type == Btc::FLAG ? Btc::getInstance() : Ltc::getInstance();
-            $instance->saleCoins($sellPrice, $sellAmount);
+            $res = $instance->saleCoins($sellPrice, $sellAmount);
 
-            $job = new OrderQuery($event->order);
-            dispatch($job);
+            if (isset($res['result']) && $res['result'] == 'success') {
+
+                $event->order->sell_id = $res['id'];
+                $event->order->save();
+
+                $job = new OrderQuery($event->order);
+                dispatch($job);
+            }
+
         }
 
         $sms['type'] = $map[$event->order->type];

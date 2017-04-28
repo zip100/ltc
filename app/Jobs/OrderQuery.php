@@ -38,11 +38,13 @@ class OrderQuery implements ShouldQueue
      */
     public function handle()
     {
+        $queryId = $this->order->sell_id > 0 ? $this->order->sell_id : $this->order->buy_id;
+
         if ($this->order->type == Btc::FLAG) {
-            $order = Btc::getInstance()->queryOrder($this->order->buy_id);
+            $order = Btc::getInstance()->queryOrder($queryId);
         }
         if ($this->order->type == Ltc::FLAG) {
-            $order = Ltc::getInstance()->queryOrder($this->order->buy_id);
+            $order = Ltc::getInstance()->queryOrder($queryId);
         }
 
         if (in_array($order['type'], [1, 3])) {

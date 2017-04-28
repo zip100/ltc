@@ -40,7 +40,7 @@ class HomeController extends Controller
 
     public function getOrderData()
     {
-        return Datatables::of(Order::query())->make(true);
+        return Datatables::of(Order::query()->orderBy('id', 'desc'))->make(true);
     }
 
     public function getBuyLtc()
