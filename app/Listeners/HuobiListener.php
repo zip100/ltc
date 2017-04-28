@@ -92,7 +92,7 @@ class HuobiListener implements ShouldQueue
                 $event->order->sell_id = $res['id'];
                 $event->order->save();
 
-                $job = new OrderQuery($event->order);
+                $job = new OrderQuery($event->order->id);
                 dispatch($job);
             }
 
