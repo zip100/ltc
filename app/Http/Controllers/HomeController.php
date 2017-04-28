@@ -84,7 +84,7 @@ class HomeController extends Controller
             $job = new OrderQuery($order->id);
             dispatch($job);
 
-            return "Buy Success";
+            return redirect('/order/info/' . $order->id);
         } else {
             return redirect()->back()->withErrors($res['message']);
         }

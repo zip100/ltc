@@ -175,6 +175,15 @@
         return parseInt(i * 10000) / 10000;
     }
 
+    function select(price){
+        $('input[name="buy_price"]').val(price);
+        $('input[name="sell_price"]').val(price+1.5);
+
+        if(confirm('价格:'+price+' 确认要买入吗?')){
+
+        }
+    }
+
     $(function(){
         setInterval(function(){
             $.ajax({
@@ -189,13 +198,13 @@
 
                     for(var i in data.top_buy){
                         var row = data.top_buy[i];
-                        var html = '<tr><td>'+row.price+'</td><td>'+row.amount+'</td><td>'+row.accu+'</td></tr>';
+                        var html = '<tr onclick="select('+row.price+')"><td>'+row.price+'</td><td>'+row.amount+'</td><td>'+row.accu+'</td></tr>';
                         $('#buy_list').append(html);
                     }
 
                     for(var i in data.top_sell){
                         var row = data.top_sell[i];
-                        var html = '<tr><td>'+row.price+'</td><td>'+row.amount+'</td><td>'+row.accu+'</td></tr>';
+                        var html = '<tr onclick="select('+row.price+')"><td>'+row.price+'</td><td>'+row.amount+'</td><td>'+row.accu+'</td></tr>';
                         $('#sell_list').append(html);
                     }
                 }
