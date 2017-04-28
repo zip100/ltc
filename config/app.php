@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => '火币助手',
 
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => 'development',
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => true,
 
     /*
     |--------------------------------------------------------------------------

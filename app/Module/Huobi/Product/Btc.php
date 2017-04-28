@@ -48,7 +48,12 @@ class Btc extends Api
         $money = self::getMoney();
         
         $amount = floor(($money / $price) * 10000) / 10000;
+        
+        $res =  parent::__buy($price, $amount, self::FLAG);
 
-        return parent::__buy($price, $amount, self::FLAG);
+        $res['data']['amount'] = $amount;
+        $res['data']['price'] = $price;
+
+        return $res;
     }
 }

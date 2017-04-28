@@ -2,6 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Events\BuyFinish;
+use App\Events\SellFinish;
+use App\Model\Order;
 use App\Module\Huobi\Product\Btc;
 use App\Module\Huobi\Product\Ltc;
 use Illuminate\Bus\Queueable;
@@ -16,17 +19,16 @@ class OrderQuery implements ShouldQueue
 
     // 0未成交　1部分成交　2已完成　3已取消 4废弃（该状态已不再使用） 5异常 6部分成交已取消 7队列中
 
-    private $order, $type, $id;
+    private $order;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($id, $type)
+    public function __construct($id)
     {
-        $this->type = $type;
-        $this->id = $id;
+        $this->order = Order::findOrFail($id);
     }
 
     /**
@@ -36,28 +38,54 @@ class OrderQuery implements ShouldQueue
      */
     public function handle()
     {
-
-        if ($this->type == Btc::FLAG) {
-            $this->order = Btc::getInstance()->queryOrder($this->id);
+        if ($this->order->type == Btc::FLAG) {
+            $order = Btc::getInstance()->queryOrder($this->order->buy_id);
         }
-        if ($this->type == Ltc::FLAG) {
-            $this->order = Ltc::getInstance()->queryOrder($this->id);
-        }
-
-        // 交易完成
-        if ($this->order['status'] == 2) {
-            \Log::info('[Buy][Success] id:' . $this->order->id);
-            $salePrice = $this->order['order_price'] + 100;
-            $saleAmount = floor(($this->order['order_amount'] - $this->order['order_amount'] * 0.002) * 10000) / 10000;
-
-            Btc::getInstance()->saleCoins($salePrice, $saleAmount);
-            return;
+        if ($this->order->type == Ltc::FLAG) {
+            $order = Ltc::getInstance()->queryOrder($this->order->buy_id);
         }
 
-        if ($this->order['status'] == 3) {
-            return;
+        if (in_array($order['type'], [1, 3])) {
+            $this->order->last_buy_query = date('y-m-d H:i:s', time());
+            $this->order->buy_status = $order['status'];
+            $this->order->save();
+
+            // 交易完成
+            if ($order['status'] == 2) {
+                event(new BuyFinish($this->order));
+                return;
+            }
+
+            if ($order['status'] == 3) {
+                return;
+            }
+
+            $this->release(2);
         }
 
-        $this->release(2);
+
+        if (in_array($order['type'], [2, 4])) {
+            $this->order->last_sell_query = date('y-m-d H:i:s', time());
+            $this->order->sell_status = $order['status'];
+            $this->order->save();
+
+            // 交易完成
+            if ($order['status'] == 2) {
+                event(new SellFinish($this->order));
+
+                $this->order->sell_money = $order['total'];
+                $this->order->sell_amount = $order['order_amount'];
+                $this->order->save();
+
+                return;
+            }
+
+            if ($order['status'] == 3) {
+                return;
+            }
+
+            $this->release(2);
+        }
     }
+
 }

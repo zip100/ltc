@@ -12,7 +12,8 @@
         <div class="col-md-2">
             <div class="list-group">
                 <a href="#" class="list-group-item active">价格列表</a>
-                <a href="{{url('/buy')}}" class="list-group-item">买卖交易</a>
+                <a href="{{url('/buy/ltc')}}" class="list-group-item">LTC交易</a>
+                <a href="{{url('/orders')}}" class="list-group-item">订单列表</a>
             </div>
         </div>
 

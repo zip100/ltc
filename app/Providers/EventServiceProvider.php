@@ -13,7 +13,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        \App\Listeners\HuobiPriceListener::class
+        \App\Listeners\HuobiListener::class
     ];
 
     /**

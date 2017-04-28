@@ -49,6 +49,12 @@ class Ltc extends Api
 
         $amount = round(($money / $price), 4);
 
-        return parent::__buy($price, $amount, self::FLAG);
+        $res =  parent::__buy($price, $amount, self::FLAG);
+
+        $res['data']['amount'] = $amount;
+        $res['data']['price'] = $price;
+        $res['data']['money'] = $money;
+
+        return $res;
     }
 }

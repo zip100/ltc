@@ -9,7 +9,8 @@
         <div class="col-md-2">
             <div class="list-group">
                 <a href="{{url('/home')}}" class="list-group-item ">价格列表</a>
-                <a href="#" class="list-group-item active">买卖交易</a>
+                <a href="#" class="list-group-item active">LTC交易</a>
+                <a href="{{url('/orders')}}" class="list-group-item">订单列表</a>
             </div>
         </div>
 
@@ -130,21 +131,31 @@
 
                         <legend>预买入信息</legend>
                         <div class="form-group">
+
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">建议价格</label>
+                                <label class="col-sm-2 control-label">建议价格</label>
                                 <div class="col-sm-2">
-                                    <input class="form-control pull-right" type="text" name="auto_price"/>
+                                    <input disabled class="form-control pull-right" type="text" name="auto_price"/>
                                 </div>
-                                <label class="col-sm-3 control-label">买入价格</label>
+                                <label class="col-sm-2 control-label">买入数量</label>
                                 <div class="col-sm-2">
-                                    <input class="form-control pull-right" type="text" name="price"/>
+                                    <input disabled class="form-control pull-right" type="text" name="auto_amount"/>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-8 control-label"></label>
-                            <div class="col-sm-2">
-                                <button type="submit" class="btn btn-success">买入</button>
+
+                            <div class="form-group">
+
+                                <label class="col-sm-2 control-label">买入价格</label>
+                                <div class="col-sm-2">
+                                    <input class="form-control pull-right" type="text" name="buy_price"/>
+                                </div>
+                                <label class="col-sm-2 control-label">卖出价格</label>
+                                <div class="col-sm-2">
+                                    <input class="form-control pull-right" type="text" name="sell_price"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-success pull-right">买入</button>
+                                </div>
                             </div>
                         </div>
 
@@ -158,6 +169,12 @@
 
 <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
 <script>
+    var money = {{$account['available_cny_display']}};
+
+    function parseAmount(i) {
+        return parseInt(i * 10000) / 10000;
+    }
+
     $(function(){
         setInterval(function(){
             $.ajax({
@@ -165,8 +182,8 @@
                 dataType:'json',
                 success:function(data){
 
-
                     $('input[name="auto_price"]').val(data.p_new);
+                    $('input[name="auto_amount"]').val(parseAmount(money / data.p_new));
 
                     $('#sell_list,#buy_list').html('');
 
