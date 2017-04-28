@@ -100,6 +100,8 @@ abstract class Api
         $tResult = $this->send2api($tParams, $extra);
 
         echo printf("Sell Price:%d Count:%d", $price, $amount), PHP_EOL;
+
+        return $tResult;
     }
 
     protected function __buy($price, $amount, $type)
@@ -158,14 +160,16 @@ abstract class Api
         return static::$_instance;
     }
 
-    public function getAllOrdes($type){
+    public function getAllOrdes($type)
+    {
         $tParams = $extra = array();
         $tParams['method'] = 'get_orders';
         $tParams['coin_type'] = $type;
         return $this->send2api($tParams, $extra);
     }
 
-    public static function sendSms($mobile,array $content){
+    public static function sendSms($mobile, array $content)
+    {
         return \Sms::send($mobile, 400046, $content);
     }
 
