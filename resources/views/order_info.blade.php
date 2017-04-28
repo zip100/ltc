@@ -35,7 +35,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">买入数量</label>
                                         <div class="col-sm-3">
-                                            <input type="text" disabled="disabled" value="{{$info['buy_price']}}" class="form-control">
+                                            <input type="text" disabled="disabled" value="{{$info['buy_amount']}}" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -59,7 +59,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">卖出数量</label>
-                                        <div class="col-sm-3"><input type="text" disabled="disabled" value="{{$info['sell_price']}}" class="form-control">
+                                        <div class="col-sm-3"><input type="text" disabled="disabled" value="{{$info['sell_amount']}}" class="form-control">
                                         </div>
                                     </div>
                                 </div>
