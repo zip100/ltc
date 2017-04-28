@@ -17,11 +17,11 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
 
             $table->smallInteger('type')->default(0);
-            $table->integer('buy_amount')->default(0);
+            $table->decimal('buy_amount')->default(0);
             $table->decimal('buy_price')->default(0);
             $table->decimal('buy_money')->default(0);
             $table->integer('buy_id')->default(0);
-            $table->integer('sell_amount')->default(0);
+            $table->decimal('sell_amount')->default(0);
             $table->decimal('sell_price')->default(0);
             $table->decimal('sell_money')->default(0);
             $table->integer('sell_id')->default(0);
