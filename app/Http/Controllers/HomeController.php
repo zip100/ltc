@@ -78,9 +78,7 @@ class HomeController extends Controller
                 'sell_money' => 0,
                 'sell_id' => 0,
                 'sell_status' => 0,
-                'buy_status' => 0,
-                'last_buy_query' => 0,
-                'last_sell_query' => 0,
+                'buy_status' => 0
             ]);
 
             $job = new OrderQuery($order->id);
