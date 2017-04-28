@@ -5,8 +5,19 @@
 <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
 
 <div class="container">
+
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+
+
+        <div class="col-md-2">
+            <div class="list-group">
+                <a href="#" class="list-group-item active">价格列表</a>
+                <a href="{{url('/buy')}}" class="list-group-item">买卖交易</a>
+            </div>
+        </div>
+
+
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">Dashboard</div>
 

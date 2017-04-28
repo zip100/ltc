@@ -26,4 +26,6 @@ Route::get('/home', 'HomeController@index');
 
 
 Route::get('/datatables/data', 'HomeController@getData');
+Route::get('/buy', 'HomeController@getBuy');
+Route::post('/buy/btc', 'HomeController@postBuyBtc');
 
