@@ -56,4 +56,8 @@ class Btc extends Api
 
         return $res;
     }
+
+    public function getAllOrders(){
+        return parent::__getAllOrdes(self::FLAG);
+    }
 }

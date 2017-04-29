@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\BtcWatch;
 use App\Console\Commands\HuobiWatch;
 use App\Console\Commands\LtcWatch;
+use App\Console\Commands\OrderSync;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         HuobiWatch::class,
+        OrderSync::class,
     ];
 
     /**

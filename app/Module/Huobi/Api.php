@@ -166,7 +166,7 @@ abstract class Api
         return static::$_instance;
     }
 
-    public function getAllOrdes($type)
+    public function __getAllOrdes($type)
     {
         $tParams = $extra = array();
         $tParams['method'] = 'get_orders';
@@ -190,4 +190,6 @@ abstract class Api
     abstract public function cancelOrder($orderId);
 
     abstract public function queryOrder($orderId);
+
+    abstract public function getAllOrders();
 }

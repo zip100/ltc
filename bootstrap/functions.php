@@ -34,3 +34,8 @@ function parseStatus($status)
             break;
     }
 }
+
+function parseMoney($money)
+{
+    return floor($money * 10000) / 10000;
+}
