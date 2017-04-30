@@ -79,7 +79,7 @@ class HuobiListener implements ShouldQueue
             Api::CONIN_BTC => 'BTC',
             Api::CONIN_LTC => 'LTC'
         ];
-        
+
         if ($event->order->sell_price > 0) {
             $sellPrice = $event->order->sell_price;
             $sellAmount = $event->order->buy_amount;
@@ -99,7 +99,7 @@ class HuobiListener implements ShouldQueue
         }
 
         $sms['type'] = $map[$event->order->type];
-        $sms['content'] = sprintf('买入数量:%d,挂单价格:%d', $event->order->buy_amount, $sellPrice);
+        $sms['content'] = sprintf('买入数量:%d,挂单价格:%d', $event->order->buy_amount, $event->order->buy_price);
         Api::sendSms('18610009545', $sms);
     }
 
