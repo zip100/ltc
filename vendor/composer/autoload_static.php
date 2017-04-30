@@ -87,6 +87,9 @@ class ComposerStaticInit198ced0f81be75ced6d0f7d21f953f93
         array (
             'Dotenv\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\Common\\Cache\\' => 22,
+            'Doctrine\\Common\\Annotations\\' => 28,
+            'Doctrine\\Common\\' => 16,
             'DeepCopy\\' => 9,
         ),
         'C' => 
@@ -227,6 +230,18 @@ class ComposerStaticInit198ced0f81be75ced6d0f7d21f953f93
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
+        'Doctrine\\Common\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
+        ),
+        'Doctrine\\Common\\Annotations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
+        ),
+        'Doctrine\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/common/lib/Doctrine/Common',
+        ),
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
@@ -277,14 +292,27 @@ class ComposerStaticInit198ced0f81be75ced6d0f7d21f953f93
         ),
         'D' => 
         array (
+            'Doctrine\\DBAL\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/dbal/lib',
+            ),
+            'Doctrine\\Common\\Lexer\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
+            ),
             'Doctrine\\Common\\Inflector\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
+            ),
+            'Doctrine\\Common\\Collections\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/collections/lib',
             ),
         ),
     );
 
     public static $classMap = array (
+        'AddNoticeAmount' => __DIR__ . '/../..' . '/database/migrations/2017_04_30_134658_add_notice_amount.php',
         'CreateHuobisTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_20_144644_create_huobis_table.php',
         'CreateOrdersTable' => __DIR__ . '/../..' . '/database/migrations/2017_04_28_143014_create_orders_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
