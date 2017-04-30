@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 node_modules/
 vendor/
 .svn/
@@ -15,3 +16,7 @@ output.log
 .arc*
 storage/download/*
 composer.phar
+=======
+/vendor/
+/srorage/
+>>>>>>> 1638959652d0e778d8ea76ff4577c482eb686082
