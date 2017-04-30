@@ -74,6 +74,9 @@ class HuobiWatch extends Command
                     event(new \App\Events\HuobiPrice($btcRow));
 
                     $this->sendTime[Api::CONIN_BTC] = time();
+
+                    $btcRow->notice_amount = $btcAmount;
+                    $btcRow->save();
                 }
 
                 $this->last[Btc::FLAG] = $btcPrice;
@@ -94,6 +97,10 @@ class HuobiWatch extends Command
                     event(new \App\Events\HuobiPrice($ltcRow));
 
                     $this->sendTime[Api::CONIN_LTC] = time();
+
+
+                    $ltcRow->notice_amount = $ltcAmount;
+                    $ltcRow->save();
                 }
 
 
