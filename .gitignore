@@ -1,0 +1,17 @@
+node_modules/
+vendor/
+.svn/
+.idea/
+composer.lock
+nohup.out
+.package
+.env
+!.gitkeep
+Homestead.json
+Homestead.yaml
+.phpstorm.meta.php
+_ide_helper.php
+output.log
+.arc*
+storage/download/*
+composer.phar

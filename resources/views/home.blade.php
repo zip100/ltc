@@ -31,6 +31,7 @@
                             <th>类型</th>
                             <th>价格</th>
                             <th>幅度</th>
+                            <th>通知</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                         </tr>
@@ -62,6 +63,7 @@
                     { data: 'type', name: 'type' },
                     { data: 'price', name: 'price' },
                     { data: 'amount', name: 'amount' },
+                    { data: 'notice_amount', name: 'notice_amount' },
                     { data: 'created_at', name: 'created_at' },
                     { data: 'updated_at', name: 'updated_at' }
                 ]

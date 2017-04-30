@@ -52,16 +52,16 @@
         function parseStatus(s) {
             switch (s) {
                 case '0':
-                    return '未成交';
+                    return '<span class="label label-default">未成交</span>';
                     break;
                 case '1':
-                    return '部分成交';
+                    return '<span class="label label-danger">部分成交</span>';
                     break;
                 case '2':
-                    return '已完成';
+                    return '<span class="label label-success">已完成</span>';
                     break;
                 case '3':
-                    return '已取消';
+                    return '<span class="label label-info">已取消</span>';
                     break;
                 case '4':
                     return '废弃';
@@ -70,7 +70,7 @@
                     return '异常';
                     break;
                 case '6':
-                    return '部分成交已取消';
+                    return '<span class="label label-primary">部分成交已取消</span>';
                     break;
                 case '7':
                     return '队列中';
