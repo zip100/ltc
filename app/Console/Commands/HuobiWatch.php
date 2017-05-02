@@ -70,7 +70,7 @@ class HuobiWatch extends Command
                 // 最近半个小时幅度
                 $btcAmount = Huobi::where('type', Btc::FLAG)->where('created_at', '>', date('Y-m-d H:i:s', time() - 120))->sum('amount');
 
-                if ($btcRow && $btcAmount <= -100 && (time() - $this->sendTime[Api::CONIN_BTC] > 120)) {
+                if ($btcRow && $btcAmount <= -50 && (time() - $this->sendTime[Api::CONIN_BTC] > 120)) {
                     event(new \App\Events\HuobiPrice($btcRow));
 
                     $this->sendTime[Api::CONIN_BTC] = time();
@@ -93,7 +93,7 @@ class HuobiWatch extends Command
                 ]);
                 // 最近半个小时幅度
                 $ltcAmount = Huobi::where('type', Ltc::FLAG)->where('created_at', '>', date('Y-m-d H:i:s', time() - 120))->sum('amount');
-                if ($ltcRow && $ltcAmount <= -1.5 && (time() - $this->sendTime[Api::CONIN_LTC] > 120)) {
+                if ($ltcRow && $ltcAmount <= -0.75 && (time() - $this->sendTime[Api::CONIN_LTC] > 120)) {
                     event(new \App\Events\HuobiPrice($ltcRow));
 
                     $this->sendTime[Api::CONIN_LTC] = time();
