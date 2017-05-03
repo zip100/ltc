@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Model\Huobi;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Console\Scheduling\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class HuobiPrice
+class HuobiPrice extends Event implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -36,6 +37,8 @@ class HuobiPrice
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return [
+            "huobi-price"
+        ];
     }
 }
