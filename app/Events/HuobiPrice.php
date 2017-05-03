@@ -16,15 +16,17 @@ class HuobiPrice
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $huobi;
+    public $time;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Huobi $huobi)
+    public function __construct(Huobi $huobi, $time = 120)
     {
         $this->huobi = $huobi;
+        $this->time = $time;
     }
 
     /**

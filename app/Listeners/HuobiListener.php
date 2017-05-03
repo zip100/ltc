@@ -55,7 +55,7 @@ class HuobiListener implements ShouldQueue
     public function priceNotice($event)
     {
         $huobi = $event->huobi;
-        $amount = \App\Model\Huobi::where('type', $huobi->type)->where('created_at', '>', date('Y-m-d H:i:s', strtotime($huobi->created_at) - 1800))->sum('amount');
+        $amount = \App\Model\Huobi::where('type', $huobi->type)->where('created_at', '>', date('Y-m-d H:i:s', strtotime($huobi->created_at) - $event->time))->sum('amount');
 
         $map = [
             Api::CONIN_BTC => 'BTC',
@@ -63,7 +63,7 @@ class HuobiListener implements ShouldQueue
         ];
 
         $sms['type'] = $map[$huobi->type];
-        $sms['content'] = $amount;
+        $sms['content'] = sprintf('最近%s分钟浮动%s当前%s', ($event->time / 60), $amount, $event->huobi->price);
 
         Api::sendSms('18610009545', $sms);
     }
