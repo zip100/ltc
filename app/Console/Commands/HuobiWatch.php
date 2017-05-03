@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\NewPrice;
 use App\Jobs\Buy;
 use App\Model\Huobi;
 use App\Module\Huobi\Api;
@@ -80,6 +81,9 @@ class HuobiWatch extends Command
                 }
 
                 $this->last[Btc::FLAG] = $btcPrice;
+                if($btcRow instanceof Huobi){
+                    event(new NewPrice($btcRow));
+                }
             }
 
 
@@ -105,7 +109,12 @@ class HuobiWatch extends Command
 
 
                 $this->last[Ltc::FLAG] = $ltcPrice;
+                if($ltcRow instanceof Huobi){
+                    event(new NewPrice($ltcRow));
+                }
+
             }
+
         }
     }
 }
