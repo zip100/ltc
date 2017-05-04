@@ -135,7 +135,7 @@ class HuobiListener implements ShouldQueue
 
                     Api::sendSms($row->mobile, [
                         'type' => $event->huobi->type,
-                        'content' => sprintf('当前价格%s%s', $row->operator, $row->price)
+                        'content' => sprintf('当前价格%s%s%s', $price, $row->operator, $row->price)
                     ]);
                 }
             }
