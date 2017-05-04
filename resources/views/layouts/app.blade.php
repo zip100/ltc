@@ -90,6 +90,18 @@
         var channel = pusher.subscribe('huobi-price');
         channel.bind('App\\Events\\HuobiPrice', function(data) {
             playSound();
+            setTimeout(function(){
+                alert((data.huobi.type == '1'?'BTC':'LTC') + '当前价格 '+ data.huobi.price+' 幅度'+ data.huobi.amount);
+            },1000);
+        });
+        channel.bind('App\\Events\\PriceNotice', function(data) {
+            playSound();
+            setTimeout(function(){
+                alert((data.notice.type == '1'?'BTC':'LTC') + '价格 '+data.notice.operator+' '+data.notice.price);
+            },1000);
+        });
+        channel.bind('App\\Events\\NewPrice', function(data) {
+            console.log(data);
         });
 
         function playSound()

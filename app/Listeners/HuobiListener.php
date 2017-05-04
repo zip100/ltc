@@ -137,6 +137,8 @@ class HuobiListener implements ShouldQueue
                         'type' => $event->huobi->type,
                         'content' => sprintf('当前价格%s%s%s', $price, $row->operator, $row->price)
                     ]);
+
+                    event(new \App\Events\PriceNotice($row));
                 }
             }
         }
