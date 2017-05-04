@@ -35,8 +35,14 @@ Route::get('/order/info/{order}', 'HomeController@getOrderInfo');
 Route::get('/notice', 'HomeController@getNotice');
 Route::get('/notice-list', 'HomeController@getNoticeList');
 Route::post('/add-notice', 'HomeController@postAddNotice');
-Route::get('/notice/delete/{id}', function($id){
+Route::get('/notice/delete/{id}', function ($id) {
     \App\Model\Notice::findOrFail($id)->delete();
     return redirect()->back();
 });
 
+
+Route::get('/git/event/push', function () {
+    $command = sprintf('cd %s && git pull && supervisorctl -c /etc/supervisord.conf restart all', $_SERVER['DOCUMENT_ROOT']);
+    system($command, $res);
+    return $res;
+});
