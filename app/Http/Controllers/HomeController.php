@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\OrderQuery;
 use App\Model\Huobi;
+use App\Model\Notice;
 use App\Model\Order;
 use App\Module\Huobi\Product\Btc;
 use App\Module\Huobi\Product\Ltc;
@@ -35,7 +36,7 @@ class HomeController extends Controller
 
     public function getData()
     {
-        return Datatables::of(Huobi::query()->where('id', '>', 1)->orderBy('id', 'desc'))->make(true);
+        return Datatables::of(Huobi::query()->orderBy('id', 'desc'))->make(true);
     }
 
     public function getOrderData()
@@ -104,5 +105,32 @@ class HomeController extends Controller
     {
         $order = Order::findOrFail($oid)->toArray();
         return view('order_info', ['info' => $order]);
+    }
+
+    public function getNotice()
+    {
+        return view('notice');
+    }
+
+    public function getNoticeList()
+    {
+        return Datatables::of(Notice::query()->orderBy('id', 'desc'))->make(true);
+    }
+
+    public function postAddNotice(Request $request){
+        $this->validate($request,[
+            'price' => 'required',
+            'operator' => 'required',
+            'type' => 'required'
+        ]);
+
+        Notice::forceCreate([
+            'type' => $request->get('type'),
+            'operator' => $request->get('operator'),
+            'price' => $request->get('price'),
+            'mobile' => $request->get('mobile')
+        ]);
+
+        return redirect()->back();
     }
 }

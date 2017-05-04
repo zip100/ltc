@@ -32,4 +32,11 @@ Route::post('/buy/ltc', 'HomeController@postBuyLtc');
 Route::get('/orders', 'HomeController@getOrders');
 Route::get('/orders/list', 'HomeController@getOrderData');
 Route::get('/order/info/{order}', 'HomeController@getOrderInfo');
+Route::get('/notice', 'HomeController@getNotice');
+Route::get('/notice-list', 'HomeController@getNoticeList');
+Route::post('/add-notice', 'HomeController@postAddNotice');
+Route::get('/notice/delete/{id}', function($id){
+    \App\Model\Notice::findOrFail($id)->delete();
+    return redirect()->back();
+});
 

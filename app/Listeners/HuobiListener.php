@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\HuobiPrice;
 use App\Jobs\OrderQuery;
+use App\Model\Notice;
 use App\Module\Huobi\Api;
 use App\Module\Huobi\Product\Btc;
 use App\Module\Huobi\Product\Ltc;
@@ -49,6 +50,10 @@ class HuobiListener implements ShouldQueue
         $events->listen(
             'App\Events\SellFinish',
             'App\Listeners\HuobiListener@sellFinish'
+        );
+        $events->listen(
+            'App\Events\NewPrice',
+            'App\Listeners\HuobiListener@newPrice'
         );
     }
 
@@ -112,6 +117,29 @@ class HuobiListener implements ShouldQueue
         $sms['type'] = $map[$event->order->type];
         $sms['content'] = sprintf('卖出完成,价格:%d,金额:%d', $event->order->sell_price, $event->order->sell_money);
         Api::sendSms('18610009545', $sms);
+    }
+
+    public function newPrice($event)
+    {
+        $price = $event->huobi->price;
+        $lists = Notice::where('status', Notice::STATUS_WAIT)->where('type', $event->huobi->type)->get();
+
+
+        if ($lists) {
+            foreach ($lists as $row) {
+                $result = false;
+                $operator = $row->operator == '=' ? '==' : $row->operator;
+                eval(sprintf('$result=%s %s %s;', $price, $operator, $row->price));
+                if ($result) {
+                    $row->fire();
+
+                    Api::sendSms($row->mobile, [
+                        'type' => $event->huobi->type,
+                        'content' => sprintf('当前价格%s%s', $row->operator, $row->price)
+                    ]);
+                }
+            }
+        }
     }
 
 }

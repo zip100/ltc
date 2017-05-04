@@ -14,6 +14,7 @@
                 <a href="#" class="list-group-item active">价格列表</a>
                 <a href="{{url('/buy/ltc')}}" class="list-group-item">LTC交易</a>
                 <a href="{{url('/orders')}}" class="list-group-item">订单列表</a>
+                <a href="{{url('/notice')}}" class="list-group-item">价格提醒</a>
             </div>
         </div>
 

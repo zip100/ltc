@@ -5,6 +5,7 @@ namespace App\Events;
 use App\Model\Huobi;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Console\Scheduling\Event;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class NewPrice extends Event implements ShouldBroadcast
+class NewPrice extends Event implements ShouldBroadcast,ShouldQueue
 {
     use Dispatchable, InteractsWithSockets;
 
