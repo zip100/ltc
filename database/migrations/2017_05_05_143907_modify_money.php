@@ -14,7 +14,6 @@ class ModifyMoney extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->increments('id');
 
             $table->decimal('buy_price', 10, 2)->default(0)->change();
             $table->decimal('buy_money', 10, 2)->default(0)->change();
@@ -22,8 +21,6 @@ class ModifyMoney extends Migration
             $table->decimal('sell_money', 10, 2)->default(0)->change();
 
             $table->decimal('notice_amount', 10, 2)->default(0)->change();
-
-            $table->timestamps();
         });
     }
 

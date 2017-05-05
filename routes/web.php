@@ -44,3 +44,9 @@ Route::get('/notice/test/{id}', function ($id) {
     event(new \App\Events\HuobiPrice(\App\Model\Huobi::findOrFail($id)));
     return redirect()->back();
 });
+
+
+
+
+Route::get('/config', 'HomeController@getConfig');
+Route::post('/config-save', 'HomeController@postConfigSave');

@@ -40,6 +40,11 @@ class Yunxinshi
 
     public function send($mobile, $templadeId, array $content)
     {
+        if (!allowSms()) {
+            \Log::info(sprintf('[Sms][Send][Disabled][Success][Request:%s]', json_encode($content)));
+            return true;
+        }
+
         $urlTemplate = 'http://api.sms.cn/sms/?ac=send&uid=%s&pwd=%s&template=%s&mobile=%s&content=%s';
         $url = sprintf($urlTemplate,
             $this->uid,

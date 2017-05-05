@@ -67,10 +67,61 @@ class HuobiListener implements ShouldQueue
             Api::CONIN_LTC => 'LTC'
         ];
 
+        if (autoBuyLtc() && $huobi->type == Ltc::FLAG && $amount <= -2) {
+
+            // 期待买入100个
+            $str = $this->buyLtc($event->huobi->price-0.5, 100);
+
+            $sms['content'] = sprintf('[尝试自动购买]最近%s分钟浮动%s当前%s,', ($event->time / 60), $amount, $event->huobi->price) . $str;
+        } else {
+            $sms['content'] = sprintf('[自动购买关闭]最近%s分钟浮动%s当前%s', ($event->time / 60), $amount, $event->huobi->price);
+        }
+
+
         $sms['type'] = $map[$huobi->type];
-        $sms['content'] = sprintf('最近%s分钟浮动%s当前%s', ($event->time / 60), $amount, $event->huobi->price);
 
         Api::sendSms('18610009545', $sms);
+    }
+
+    public function buyLtc($price, $amount)
+    {
+        $money = Api::getInstance()->getMoney();
+        $needMoney = $price * $amount;
+
+        if ($needMoney > $money) {
+            $buyAmount = parseMoney($money / $price);
+        } else {
+            $buyAmount = $amount;
+        }
+
+
+        $buyPrice = $price;
+        $sellPrice = $buyPrice + 1.5;
+
+        $res = Ltc::getInstance()->buyCoins($buyPrice, $buyAmount);
+        if (isset($res['result']) && $res['result'] == 'success') {
+            $order = Order::forceCreate([
+                'type' => Ltc::FLAG,
+                'buy_price' => $res['data']['price'],
+                'buy_amount' => $res['data']['amount'],
+                'buy_money' => $res['data']['money'],
+                'buy_id' => $res['id'],
+                'sell_price' => $sellPrice,
+                'sell_amount' => $res['data']['amount'],
+                'sell_money' => 0,
+                'sell_id' => 0,
+                'sell_status' => 0,
+                'buy_status' => 0
+            ]);
+
+            $job = new OrderQuery($order->id);
+            dispatch($job);
+            return sprintf('[买入挂单][成功][价格:%s][数量:%s]', $buyPrice, $buyAmount);
+        } else {
+            return sprintf('[买入挂单][失败][价格:%s][数量:%s]', $buyPrice, $buyAmount);
+        }
+
+
     }
 
     public function huobiWatch($event)

@@ -39,3 +39,13 @@ function parseMoney($money)
 {
     return floor($money * 10000) / 10000;
 }
+
+
+function allowSms()
+{
+    return \App\Model\Config::where('key', \App\Model\Config::ENABLED_SMS)->where('value', 1)->count() == 1;
+}
+
+function autoBuyLtc(){
+    return \App\Model\Config::where('key', \App\Model\Config::AUTO_BUY_LTC_WHEN_NOTICE)->where('value', 1)->count() == 1;
+}

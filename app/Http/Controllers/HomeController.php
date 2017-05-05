@@ -10,6 +10,7 @@ use App\Module\Huobi\Product\Btc;
 use App\Module\Huobi\Product\Ltc;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Yajra\Datatables\Datatables;
 
 class HomeController extends Controller
@@ -132,6 +133,24 @@ class HomeController extends Controller
             'mobile' => $request->get('mobile')
         ]);
 
+        return redirect()->back();
+    }
+
+    public function getConfig()
+    {
+        $lists = \App\Model\Config::get();
+        return view('config', ['lists' => $lists]);
+    }
+
+    public function postConfigSave(Request $request)
+    {
+        $arr = $request->all();
+        unset($arr['_token']);
+        foreach ($arr as $key => $row) {
+            $config = \App\Model\Config::where('key', $key)->first();
+            $config->value = $row;
+            $config->save();
+        }
         return redirect()->back();
     }
 }
