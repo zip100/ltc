@@ -33,8 +33,8 @@
                             <th>价格</th>
                             <th>幅度</th>
                             <th>通知</th>
+                            <th>操作</th>
                             <th>Created At</th>
-                            <th>Updated At</th>
                         </tr>
                         </thead>
                     </table>
@@ -65,8 +65,10 @@
                     { data: 'price', name: 'price' },
                     { data: 'amount', name: 'amount' },
                     { data: 'notice_amount', name: 'notice_amount' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'updated_at', name: 'updated_at' }
+                    { data: 'id', name: 'id' ,render:function(data){
+                        return '<a type="button" href="{{url('/notice/test')}}/'+data+'" class="btn btn-xs btn-danger">测试</a>';
+                    }},
+                    { data: 'created_at', name: 'created_at' }
                 ]
             });
         });

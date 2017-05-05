@@ -40,9 +40,7 @@ Route::get('/notice/delete/{id}', function ($id) {
     return redirect()->back();
 });
 
-
-Route::get('/git/event/push', function () {
-    $command = sprintf('cd %s && git pull && supervisorctl -c /etc/supervisord.conf restart all', $_SERVER['DOCUMENT_ROOT']);
-    system($command, $res);
-    return $res;
+Route::get('/notice/test/{id}', function ($id) {
+    event(new \App\Events\HuobiPrice(\App\Model\Huobi::findOrFail($id)));
+    return redirect()->back();
 });
