@@ -147,10 +147,20 @@ class HomeController extends Controller
         $arr = $request->all();
         unset($arr['_token']);
         foreach ($arr as $key => $row) {
+
+            if (!is_numeric($key) && !$row) {
+                continue;
+            }
+
             $config = \App\Model\Config::where('key', $key)->first();
+            if (!$config) {
+                continue;
+            }
+
             $config->value = $row;
             $config->save();
         }
+
         return redirect()->back();
     }
 }
