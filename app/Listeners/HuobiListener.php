@@ -67,14 +67,18 @@ class HuobiListener implements ShouldQueue
             Api::CONIN_LTC => 'LTC'
         ];
 
-        if (autoBuyLtc() && $huobi->type == Ltc::FLAG && $amount <= -2) {
+
+        $autoBuy = autoBuyLtc();
+        $autoBuyStr = $autoBuy ? '自动购买开启' : '自动购买关闭';
+
+        if ($autoBuy && $huobi->type == Ltc::FLAG && $amount <= -2) {
 
             // 期待买入100个
-            $str = $this->buyLtc($event->huobi->price-0.5, 100);
+            $str = $this->buyLtc($event->huobi->price - 0.5, 100);
 
             $sms['content'] = sprintf('[尝试自动购买]最近%s分钟浮动%s当前%s,', ($event->time / 60), $amount, $event->huobi->price) . $str;
         } else {
-            $sms['content'] = sprintf('[自动购买关闭]最近%s分钟浮动%s当前%s', ($event->time / 60), $amount, $event->huobi->price);
+            $sms['content'] = sprintf('[%s]最近%s分钟浮动%s当前%s', $autoBuyStr, ($event->time / 60), $amount, $event->huobi->price);
         }
 
 
