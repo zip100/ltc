@@ -95,7 +95,7 @@ abstract class Api
         $tParams = $extra = array();
         $tParams['method'] = 'sell';
         $tParams['coin_type'] = $type;
-        $tParams['price'] = $price;
+        $tParams['price'] = round($price,2);
         $tParams['amount'] = $amount;
         $tResult = $this->send2api($tParams, $extra);
 
