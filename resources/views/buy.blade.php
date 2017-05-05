@@ -32,7 +32,7 @@
 
                     <div class="panel-body">
 
-                        <form class="form-horizontal" role="form" method="post" action="{{url('/buy/btc')}}">
+                        <form class="form-horizontal" role="form" method="post" action="{{url('/buy/ltc')}}">
                             {{ csrf_field() }}
                             <fieldset>
                                 <legend>账户信息</legend>

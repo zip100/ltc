@@ -114,7 +114,7 @@ abstract class Api
         $tParams['amount'] = $amount;
 
         $res = $this->send2api($tParams, $extra);
-        $res['data']['amount'] = $amount;
+        $res['data']['amount'] = parseMoney($amount - $amount * 0.002);
         $res['data']['price'] = $price;
         $res['data']['money'] = $amount * $price;
 

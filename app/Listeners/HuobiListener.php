@@ -84,10 +84,11 @@ class HuobiListener implements ShouldQueue
             Api::CONIN_BTC => 'BTC',
             Api::CONIN_LTC => 'LTC'
         ];
+        $sms['content'] = sprintf('买入数量:%d,买入价格:%d', $event->order->buy_amount, $event->order->buy_price);
 
         if ($event->order->sell_price > 0) {
             $sellPrice = $event->order->sell_price;
-            $sellAmount = $event->order->buy_amount;
+            $sellAmount = $event->order->sell_amount;
 
             $instance = $event->order->type == Btc::FLAG ? Btc::getInstance() : Ltc::getInstance();
             $res = $instance->saleCoins($sellPrice, $sellAmount);
@@ -99,12 +100,17 @@ class HuobiListener implements ShouldQueue
 
                 $job = new OrderQuery($event->order->id);
                 dispatch($job);
+
+                $sms['content'] = sprintf('买入数量:%s,买入价格:%s,挂单价格:%s,挂单数量:%s', $event->order->buy_amount, $event->order->buy_price, $sellPrice, $sellAmount);
+
+            } else {
+
+                $sms['content'] = sprintf('买入数量:%s,买入价格:%s,挂单价格:%s,挂单数量:%s,挂单失败', $event->order->buy_amount, $event->order->buy_price, $sellPrice, $sellAmount);
             }
 
         }
 
         $sms['type'] = $map[$event->order->type];
-        $sms['content'] = sprintf('买入数量:%d,挂单价格:%d', $event->order->buy_amount, $event->order->buy_price);
         Api::sendSms('18610009545', $sms);
     }
 

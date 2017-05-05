@@ -51,7 +51,7 @@ class HomeController extends Controller
         return view('buy', ['account' => $account]);
     }
 
-    public function postBuyBtc(Request $request)
+    public function postBuyLtc(Request $request)
     {
         $this->validate($request, [
             'buy_price' => 'required'
@@ -80,7 +80,7 @@ class HomeController extends Controller
                 'buy_money' => $res['data']['money'],
                 'buy_id' => $res['id'],
                 'sell_price' => $sellPrice,
-                'sell_amount' => 0,
+                'sell_amount' => $res['data']['amount'],
                 'sell_money' => 0,
                 'sell_id' => 0,
                 'sell_status' => 0,
@@ -117,8 +117,9 @@ class HomeController extends Controller
         return Datatables::of(Notice::query()->orderBy('id', 'desc'))->make(true);
     }
 
-    public function postAddNotice(Request $request){
-        $this->validate($request,[
+    public function postAddNotice(Request $request)
+    {
+        $this->validate($request, [
             'price' => 'required',
             'operator' => 'required',
             'type' => 'required'
