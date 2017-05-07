@@ -213,6 +213,8 @@ class HuobiListener implements ShouldQueue
 
                                 $info = Ltc::getInstance()->queryOrder($res['id']);
 
+                                $base = $info['order_amount'] / $info['processed_price'];
+
                                 $order = Order::forceCreate([
                                     'type' => $row->type,
                                     'buy_price' => $info['processed_price'],
@@ -220,7 +222,7 @@ class HuobiListener implements ShouldQueue
                                     'buy_money' => round($info['processed_price'] * $info['order_amount'], 2),
                                     'buy_id' => $res['id'],
                                     'sell_price' => $info['processed_price'] + 1.5,
-                                    'sell_amount' => $info['vot'],
+                                    'sell_amount' => parseMoney($base - $base * 0.002),
                                     'sell_money' => 0,
                                     'sell_id' => 0,
                                     'sell_status' => 0,
