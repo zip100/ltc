@@ -216,7 +216,7 @@ class HuobiListener implements ShouldQueue
                                 $order = Order::forceCreate([
                                     'type' => $row->type,
                                     'buy_price' => $info['processed_price'],
-                                    'buy_amount' => $instance['vot'],
+                                    'buy_amount' => $info['vot'],
                                     'buy_money' => round($info['processed_price'] * $info['order_amount'], 2),
                                     'buy_id' => $res['id'],
                                     'sell_price' => $info['processed_price'] + 1.5,
