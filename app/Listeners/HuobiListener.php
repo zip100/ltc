@@ -204,7 +204,7 @@ class HuobiListener implements ShouldQueue
 
                     switch ($row->action) {
                         case 'buy':
-                            $res = $instance->buyMarket($row->amount);
+                            $res = $instance->buyMarket(round($row->amount, 2));
                             $str = ',[触发买入]';
                             break;
                         case 'sell':
