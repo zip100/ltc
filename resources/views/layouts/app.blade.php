@@ -77,6 +77,8 @@
             </div>
         </nav>
 
+        <nav id="notice_bar"></nav>
+
         @yield('content')
     </div>
 
@@ -86,19 +88,23 @@
 
     <script src="http://js.pusher.com/3.0/pusher.min.js"></script>
     <script>
+
+        function showNotice(str){
+            var html = '<marquee id="_notice"><font color=red>'+str+'</font></marquee>';
+            $('#_notice').remove();
+            $('#notice_bar').html(html);
+        }
+
         var pusher = new Pusher("5e212c99987a22408668",{cluster:'ap1',encrypted: true})
         var channel = pusher.subscribe('huobi-price');
         channel.bind('App\\Events\\HuobiPrice', function(data) {
             playSound();
-            setTimeout(function(){
-                alert((data.huobi.type == '1'?'BTC':'LTC') + '当前价格 '+ data.huobi.price+' 幅度'+ data.huobi.amount);
-            },1000);
+            showNotice((data.huobi.type == '1'?'BTC':'LTC') + '当前价格 '+ data.huobi.price+' 幅度'+ data.huobi.amount);
         });
         channel.bind('App\\Events\\PriceNotice', function(data) {
             playSound();
-            setTimeout(function(){
-                alert((data.notice.type == '1'?'BTC':'LTC') + '价格 '+data.notice.operator+' '+data.notice.price);
-            },1000);
+            showNotice((data.notice.type == '1'?'BTC':'LTC') + '价格 '+data.notice.operator+' '+data.notice.price);
+
         });
         channel.bind('App\\Events\\NewPrice', function(data) {
             console.log(data);
