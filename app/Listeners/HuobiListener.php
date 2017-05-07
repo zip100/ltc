@@ -59,6 +59,10 @@ class HuobiListener implements ShouldQueue
 
     public function priceNotice($event)
     {
+        if (!priceWatch()) {
+            return;
+        }
+
         $huobi = $event->huobi;
         $amount = \App\Model\Huobi::where('type', $huobi->type)->where('created_at', '>', date('Y-m-d H:i:s', strtotime($huobi->created_at) - $event->time))->sum('amount');
 

@@ -49,3 +49,7 @@ function allowSms()
 function autoBuyLtc(){
     return \App\Model\Config::where('key', \App\Model\Config::AUTO_BUY_LTC_WHEN_NOTICE)->where('value', 1)->count() == 1;
 }
+
+function priceWatch(){
+    return \App\Model\Config::where('key', \App\Model\Config::ENABLED_PRICE_WATCH)->where('value', 1)->count() == 1;
+}

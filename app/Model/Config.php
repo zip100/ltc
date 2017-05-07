@@ -8,6 +8,7 @@ class Config extends Model
 {
     const AUTO_BUY_LTC_WHEN_NOTICE = 1;
     const ENABLED_SMS = 2;
+    const ENABLED_PRICE_WATCH = 3;
 
     const TYPE_CHECKBOX = 1;
 }
