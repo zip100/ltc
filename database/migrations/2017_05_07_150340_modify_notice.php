@@ -14,8 +14,8 @@ class ModifyNotice extends Migration
     public function up()
     {
         Schema::table('notices', function (Blueprint $table) {
-            $table->string('action')->default('');
-            $table->decimal('amount', 10, 4)->default(0);
+            $table->string('action')->nullable()->default(null);
+            $table->decimal('amount', 10, 4)->nullable()->default(null);
         });
     }
 
