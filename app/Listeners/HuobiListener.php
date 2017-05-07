@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\HuobiPrice;
 use App\Jobs\OrderQuery;
 use App\Model\Notice;
+use App\Model\Order;
 use App\Module\Huobi\Api;
 use App\Module\Huobi\Product\Btc;
 use App\Module\Huobi\Product\Ltc;
