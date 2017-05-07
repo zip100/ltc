@@ -132,7 +132,7 @@ class HomeController extends Controller
             'price' => $request->get('price'),
             'mobile' => $request->get('mobile'),
             'action' => $request->get('action', ''),
-            'amount' => $request->get('amount', 0),
+            'amount' => $request->get('amount', '0'),
         ]);
 
         return redirect()->back();
