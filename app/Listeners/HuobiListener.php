@@ -256,6 +256,7 @@ class HuobiListener implements ShouldQueue
 
                                 $job = new OrderQuery($order->id);
                                 dispatch($job);
+                            }
 
                             break;
                     }
