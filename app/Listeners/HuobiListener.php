@@ -185,6 +185,8 @@ class HuobiListener implements ShouldQueue
         $price = $event->huobi->price;
         $lists = Notice::where('status', Notice::STATUS_WAIT)->where('type', $event->huobi->type)->get();
 
+        $instance = $event->huobi->type == Ltc::FLAG ? Ltc::getInstance() : Btc::getInstance();
+
 
         if ($lists) {
             foreach ($lists as $row) {
@@ -194,9 +196,30 @@ class HuobiListener implements ShouldQueue
                 if ($result) {
                     $row->fire();
 
+                    $str = '';
+
+                    switch ($row->action) {
+                        case 'buy':
+                            $res = $instance->buyMarket($row->amount);
+                            $str = ',[触发买入]';
+                            break;
+                        case 'sell':
+                            $res = $instance->sellMarket($row->amount);
+                            $str = ',[触发卖出]';
+                            break;
+                    }
+
+                    if (isset($res) && $res['result'] == 'success') {
+                        $str .= '[成功]';
+                    }
+                    if (isset($res) && (!isset($res['result']) || $res['result'] != 'success')) {
+                        $str .= '[失败]';
+                    }
+
+
                     Api::sendSms($row->mobile, [
                         'type' => $event->huobi->type,
-                        'content' => sprintf('当前价格%s%s%s', $price, $row->operator, $row->price)
+                        'content' => sprintf('当前价格%s%s%s', $price, $row->operator, $row->price) . $str
                     ]);
 
                     event(new \App\Events\PriceNotice($row));

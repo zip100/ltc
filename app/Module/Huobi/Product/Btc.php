@@ -46,10 +46,10 @@ class Btc extends Api
     {
         // 当前余额
         $money = self::getMoney();
-        
+
         $amount = floor(($money / $price) * 10000) / 10000;
-        
-        $res =  parent::__buy($price, $amount, self::FLAG);
+
+        $res = parent::__buy($price, $amount, self::FLAG);
 
         $res['data']['amount'] = $amount;
         $res['data']['price'] = $price;
@@ -57,7 +57,18 @@ class Btc extends Api
         return $res;
     }
 
-    public function getAllOrders(){
+    public function getAllOrders()
+    {
         return parent::__getAllOrdes(self::FLAG);
+    }
+
+    public function buyMarket($amount)
+    {
+        return parent::_buyMarket(self::FLAG, $amount);
+    }
+
+    public function sellMarket($amount)
+    {
+        return parent::_sellMarket(self::FLAG, $amount);
     }
 }

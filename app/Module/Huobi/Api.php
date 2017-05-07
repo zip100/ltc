@@ -95,7 +95,7 @@ abstract class Api
         $tParams = $extra = array();
         $tParams['method'] = 'sell';
         $tParams['coin_type'] = $type;
-        $tParams['price'] = round($price,2);
+        $tParams['price'] = round($price, 2);
         $tParams['amount'] = $amount;
         $tResult = $this->send2api($tParams, $extra);
 
@@ -179,6 +179,24 @@ abstract class Api
         return \Sms::send($mobile, 400046, $content);
     }
 
+    protected function _buyMarket($type, $amount)
+    {
+        $tParams = $extra = array();
+        $tParams['method'] = 'buy_market';
+        $tParams['coin_type'] = $type;
+        $tParams['amount'] = $amount;
+        return $this->send2api($tParams, $extra);
+    }
+
+    protected function _sellMarket($type, $amount)
+    {
+        $tParams = $extra = array();
+        $tParams['method'] = 'sell_market';
+        $tParams['coin_type'] = $type;
+        $tParams['amount'] = $amount;
+        return $this->send2api($tParams, $extra);
+    }
+
     abstract public function getLastPrice();
 
     abstract public function buyCoins($price, $amount);
@@ -192,4 +210,8 @@ abstract class Api
     abstract public function queryOrder($orderId);
 
     abstract public function getAllOrders();
+
+    abstract public function buyMarket($amount);
+    
+    abstract public function sellMarket($amount);
 }

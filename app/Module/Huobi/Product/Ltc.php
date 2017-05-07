@@ -41,7 +41,7 @@ class Ltc extends Api
     {
         return parent::__query($orderId, self::FLAG);
     }
-    
+
     public function buyCoinsAuto($price)
     {
         // 当前余额
@@ -49,12 +49,23 @@ class Ltc extends Api
 
         $amount = round(($money / $price), 4);
 
-        $res =  parent::__buy($price, $amount, self::FLAG);
+        $res = parent::__buy($price, $amount, self::FLAG);
 
         return $res;
     }
 
-    public function getAllOrders(){
+    public function getAllOrders()
+    {
         return parent::__getAllOrdes(self::FLAG);
+    }
+
+    public function buyMarket($amount)
+    {
+        return parent::_buyMarket(self::FLAG, $amount);
+    }
+
+    public function sellMarket($amount)
+    {
+        return parent::_sellMarket(self::FLAG, $amount);
     }
 }

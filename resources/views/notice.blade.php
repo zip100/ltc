@@ -30,7 +30,7 @@
                         <table class="table table-bordered" id="users-table">
                             <thead>
                             <tr>
-                                <th colspan="7">
+                                <th colspan="9">
                                     <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">添加</button>
                                 </th>
                             </tr>
@@ -40,6 +40,8 @@
                                 <th>条件</th>
                                 <th>价格</th>
                                 <th>状态</th>
+                                <th>动作</th>
+                                <th>数量</th>
                                 <th>操作</th>
                                 <th>Created At</th>
                             </tr>
@@ -104,6 +106,24 @@
                                 </div>
                             </div>
                         </fieldset>
+
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="ds_host" name="price">触发</label>
+                                <div class="col-sm-4">
+                                    <select id="disabledSelect" class="form-control" name="action">
+                                        <option>无</option>
+                                        <option value="buy">市价买入</option>
+                                        <option value="sell">市价卖出</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-2 control-label" for="ds_amount">数量</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" id="ds_amount" type="text" name="amount"/>
+                                </div>
+                            </div>
+                        </fieldset>
                     </form>
 
                 </div>
@@ -146,6 +166,20 @@
                             }
 
                         }},
+                        {data: 'action', name: 'action',render:function(a){
+                            switch (a){
+                                case 'buy':
+                                        return '市价买入';
+                                    break;
+                                case 'sell':
+                                        return '市价卖出';
+                                    break;
+                                default:
+                                        return '';
+                                    break;
+                            }
+                        }},
+                        {data: 'amount', name: 'amount'},
                         {data: 'id', name: 'id',render: function (data) {
                             return '<a type="button" href="{{url('/notice/delete')}}/'+data+'" class="btn btn-xs btn-danger">删除</a>';
                         }},
