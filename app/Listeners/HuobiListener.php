@@ -206,10 +206,57 @@ class HuobiListener implements ShouldQueue
                         case 'buy':
                             $res = $instance->buyMarket(round($row->amount, 2));
                             $str = ',[触发买入]';
+
+
+                            if ($res['result'] == 'success') {
+
+                                $info = Ltc::getInstance()->queryOrder($res['id']);
+
+                                $order = Order::forceCreate([
+                                    'type' => $row->type,
+                                    'buy_price' => $info['processed_price'],
+                                    'buy_amount' => $instance['vot'],
+                                    'buy_money' => round($info['processed_price'] * $info['order_amount'], 2),
+                                    'buy_id' => $res['id'],
+                                    'sell_price' => $info['processed_price'] + 1.5,
+                                    'sell_amount' => $info['vot'],
+                                    'sell_money' => 0,
+                                    'sell_id' => 0,
+                                    'sell_status' => 0,
+                                    'buy_status' => 0
+                                ]);
+
+                                $job = new OrderQuery($order->id);
+                                dispatch($job);
+                            }
+
+
                             break;
                         case 'sell':
                             $res = $instance->sellMarket($row->amount);
                             $str = ',[触发卖出]';
+
+                            if ($res['result'] == 'success') {
+
+                                $info = Ltc::getInstance()->queryOrder($res['id']);
+
+                                $order = Order::forceCreate([
+                                    'type' => $row->type,
+                                    'buy_price' => 0,
+                                    'buy_amount' => 0,
+                                    'buy_money' => 0,
+                                    'buy_id' => 0,
+                                    'sell_price' => $info['processed_price'],
+                                    'sell_amount' => $info['order_amount'],
+                                    'sell_money' => 0,
+                                    'sell_id' => $res['id'],
+                                    'sell_status' => 0,
+                                    'buy_status' => 0
+                                ]);
+
+                                $job = new OrderQuery($order->id);
+                                dispatch($job);
+
                             break;
                     }
 
