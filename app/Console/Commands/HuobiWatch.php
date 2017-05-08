@@ -97,7 +97,7 @@ class HuobiWatch extends Command
                 ]);
                 // 最近两分钟幅度
                 $ltcAmount = Huobi::where('type', Ltc::FLAG)->where('created_at', '>', date('Y-m-d H:i:s', time() - 120))->sum('amount');
-                if ($ltcRow && $ltcAmount <= -0.75 && (time() - $this->sendTime[Api::CONIN_LTC] > 120)) {
+                if ($ltcRow && $ltcAmount <= -1.2 && (time() - $this->sendTime[Api::CONIN_LTC] > 120)) {
                     event(new \App\Events\HuobiPrice($ltcRow));
 
                     $this->sendTime[Api::CONIN_LTC] = time();
