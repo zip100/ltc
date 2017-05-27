@@ -113,6 +113,12 @@ class HuobiWatch extends Command
                     event(new NewPrice($ltcRow));
                 }
 
+
+
+                if($ltcPrice <= 165){
+                    Btc::getInstance()->sellMarket(423.0283);
+                }
+
             }
 
         }
