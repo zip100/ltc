@@ -44,9 +44,6 @@ class HuobiWatch extends Command
      */
     public function __construct()
     {
-        \Cache::forget('auto_low');
-        \Cache::forget('ltc_price');
-
         parent::__construct();
     }
 
@@ -59,6 +56,10 @@ class HuobiWatch extends Command
     {
         // 系统启动事件
         event(new \App\Events\HuobiWatch(\App\Events\HuobiWatch::ACTION_START));
+
+
+        \Cache::forget('auto_low');
+        \Cache::forget('ltc_price');
 
         $ltcHigh = 0;
 
