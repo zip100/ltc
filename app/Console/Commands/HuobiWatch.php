@@ -96,12 +96,11 @@ class HuobiWatch extends Command
             $ltcPrice = Ltc::getInstance()->getLastPrice();
 
 
-
             if ($ltcPrice != $this->last[Ltc::FLAG]) {
 
                 if ($ltcPrice > $this->last[Ltc::FLAG]) {
                     $ltcHigh = $ltcPrice;
-                    if (\Cache::get('auto_low') == '1') {
+                    if (\Cache::get('auto_low') == '1' && $ltcPrice - 4 > \Cache::get('ltc_price')) {
                         \Cache::forever('ltc_price', $ltcHigh - 4);
                     }
                 }
