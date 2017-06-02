@@ -44,6 +44,9 @@ class HuobiWatch extends Command
      */
     public function __construct()
     {
+        \Cache::forget('auto_low');
+        \Cache::forget('ltc_price');
+
         parent::__construct();
     }
 
@@ -57,10 +60,12 @@ class HuobiWatch extends Command
         // 系统启动事件
         event(new \App\Events\HuobiWatch(\App\Events\HuobiWatch::ACTION_START));
 
+        $ltcHigh = 0;
+
         while (1) {
             $btcRow = $ltcRow = 0;
 
-            $btcPrice = Btc::getInstance()->getLastPrice();
+            /*$btcPrice = Btc::getInstance()->getLastPrice();
             if ($btcPrice != $this->last[Btc::FLAG]) {
 
                 $this->last[Btc::FLAG] != 0 && $btcRow = Huobi::forceCreate([
@@ -84,10 +89,19 @@ class HuobiWatch extends Command
                 if($btcRow instanceof Huobi){
                     event(new NewPrice($btcRow));
                 }
-            }
+            } */
 
 
             $ltcPrice = Ltc::getInstance()->getLastPrice();
+
+            if ($ltcPrice > $this->last[Ltc::FLAG]) {
+                $ltcHigh = $ltcPrice;
+                if (\Cache::get('auto_low') == '1') {
+                    \Cache::forever('ltc_price', $ltcHigh - 4);
+                }
+            }
+
+
             if ($ltcPrice != $this->last[Ltc::FLAG]) {
 
                 $this->last[Ltc::FLAG] != 0 && $ltcRow = Huobi::forceCreate([
@@ -109,7 +123,7 @@ class HuobiWatch extends Command
 
 
                 $this->last[Ltc::FLAG] = $ltcPrice;
-                if($ltcRow instanceof Huobi){
+                if ($ltcRow instanceof Huobi) {
                     event(new NewPrice($ltcRow));
                 }
 
@@ -117,6 +131,10 @@ class HuobiWatch extends Command
                 $price = \Cache::get('ltc_price');
 
                 if ($price > 0 && $ltcPrice <= $price) {
+
+                    \Cache::forget('auto_low');
+                    \Cache::forget('ltc_price');
+
                     $info = \App\Module\Huobi\Product\Btc::getInstance()->getAccountInfo();
                     Btc::getInstance()->sellMarket($info['available_ltc_display']);
                 }

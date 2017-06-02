@@ -49,6 +49,7 @@ class HuobiGet extends Command
         $var = \Cache::get($key);
 
         echo sprintf('%s : %s', $key, $var), PHP_EOL;
+        echo sprintf('AutoLow : %s', \Cache::get('auto_low')), PHP_EOL;
 
 
     }

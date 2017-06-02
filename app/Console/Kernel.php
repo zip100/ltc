@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\BtcWatch;
+use App\Console\Commands\HuobiAutoLow;
 use App\Console\Commands\HuobiGet;
 use App\Console\Commands\HuobiSet;
 use App\Console\Commands\HuobiWatch;
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
         PusherTest::class,
         HuobiSet::class,
         HuobiGet::class,
+        HuobiAutoLow::class
     ];
 
     /**
