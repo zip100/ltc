@@ -95,15 +95,17 @@ class HuobiWatch extends Command
 
             $ltcPrice = Ltc::getInstance()->getLastPrice();
 
-            if ($ltcPrice > $this->last[Ltc::FLAG]) {
-                $ltcHigh = $ltcPrice;
-                if (\Cache::get('auto_low') == '1') {
-                    \Cache::forever('ltc_price', $ltcHigh - 4);
-                }
-            }
 
 
             if ($ltcPrice != $this->last[Ltc::FLAG]) {
+
+                if ($ltcPrice > $this->last[Ltc::FLAG]) {
+                    $ltcHigh = $ltcPrice;
+                    if (\Cache::get('auto_low') == '1') {
+                        \Cache::forever('ltc_price', $ltcHigh - 4);
+                    }
+                }
+
 
                 $this->last[Ltc::FLAG] != 0 && $ltcRow = Huobi::forceCreate([
                     'type' => Ltc::FLAG,
