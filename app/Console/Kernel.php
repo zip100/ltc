@@ -3,6 +3,8 @@
 namespace App\Console;
 
 use App\Console\Commands\BtcWatch;
+use App\Console\Commands\HuobiGet;
+use App\Console\Commands\HuobiSet;
 use App\Console\Commands\HuobiWatch;
 use App\Console\Commands\LtcWatch;
 use App\Console\Commands\OrderSync;
@@ -21,6 +23,8 @@ class Kernel extends ConsoleKernel
         HuobiWatch::class,
         OrderSync::class,
         PusherTest::class,
+        HuobiSet::class,
+        HuobiGet::class,
     ];
 
     /**

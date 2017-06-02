@@ -114,9 +114,11 @@ class HuobiWatch extends Command
                 }
 
 
+                $price = \Cache::get('ltc_price');
 
-                if($ltcPrice <= 165){
-                    Btc::getInstance()->sellMarket(423.0283);
+                if ($price > 0 && $ltcPrice <= $price) {
+                    $info = \App\Module\Huobi\Product\Btc::getInstance()->getAccountInfo();
+                    Btc::getInstance()->sellMarket($info['available_ltc_display']);
                 }
 
             }
